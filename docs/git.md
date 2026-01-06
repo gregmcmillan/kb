@@ -9,16 +9,25 @@ The Git protocol was created by [Linus Torvalds](https://en.wikipedia.org/wiki/L
 
 # Installation
  
- Xcode and CLI tools. You might encounter an error message prompting you to install Xcode (or its command line developer tools) because Git relies on some underlying libraries and tools that are bundled with Xcode on macOS
+ Xcode and CLI tools. You might encounter an error message prompting you to install Xcode (or its command line developer tools) because Git relies on some underlying libraries and tools that are bundled with Xcode on macOS.
+
+ Here is a breakdown of why this happens:
+ 1. macOS is a certified UNIX operating system and manages many of its core developer tools differently than Windows or Linux.
+ 2. Git is a command-line tool and requires access to standard UNIX tools like compilers (gcc or clang), make, and various headers and libraries to run correctly.
+ 3. These necessary tools are part of the Xcode suite. When you try to run a command-line utility like git, macOS checks for the presence of these dependencies. If they are missing, the system prompts you to install them. 
 
  Go to the Apple Developer Downloads page (developer.apple.com/download/) and download the CLI tools.
 
 
-# Michael North's git workflow tutorial
+```
+% which git
+/usr/bin/git
 
-Mike's demo
------------
-https://bluejeans.com/s/Odc5EOJ2r68/
+% git --version
+git version 2.50.1 (Apple Git-155)
+```
+
+# Michael North's git workflow tutorial
 
 Minimum viable workflow:
 
@@ -30,9 +39,7 @@ Get a code review
 Merge the change into the code base
 
 
-====================================
-
-I. Get a local copy of a multiproduct
+## I. Get a local copy of a multiproduct
 
 $ mint checkout example-w1-python-cli
 ✔ example-w1-python-cli checked out to /Users/gmcmilla/github/example-w1-python-cli_trunk
@@ -44,10 +51,7 @@ gmcmilla-mn2:example-w1-python-cli_trunk gmcmilla$
 
 We know it's an MP because it always ends with trunk
 
-
-====================================
-
-II. Prepare a review branch containing that change
+## II. Prepare a review branch containing that change
 
 As a best practice, checkout a branch at the very beginning of my workflow and make my commits on that branch. This way I can always return to a clean master if needed. This approach also supports a good starting point for any new task I may need to pick up.
 
@@ -76,9 +80,7 @@ git fetch
 git reset --hard origin/master
 ```
 
-====================================
-
-III. Make a local code change
+## III. Make a local code change
 
 1. Add a README.md file
 
@@ -155,9 +157,7 @@ Date:   Thu Aug 13 18:21:25 2020 -0700
 Note that my master (HEAD -> master) is ahead of GH's master (tag: example-w1-python-cli_0.0.0, origin/master, origin/HEAD). That is, the last I saw of GH's master. I'm further ahead in history.
 
 
-====================================
-
-IV. Create a pull request
+## IV. Create a pull request
 
 1. Push my branch and deliver its code to a git remote:
 
@@ -232,9 +232,8 @@ $ git remote -v
 origin	ssh://git@linkedin.githubprivate.com/multiproducts/example-w1-python-cli.git (fetch)
 origin	ssh://git@linkedin.githubprivate.com/multiproducts/example-w1-python-cli.git (push)
 
-====================================
 
-V. Get a code review
+## V. Get a code review
 
 PR authors cannot approve their own pull requests; only MP owners can do it.
 
@@ -255,8 +254,6 @@ o Comments can be added in the gutter.
 
 2. On the Write tab, an approver will select Approve > Submit review:
 
-￼
-
 
 Tips. 
 
@@ -264,13 +261,8 @@ o To update the PR with new staged changes in the review branch, use git add, gi
 
 o To re-request a review from someone, click the circular refresh icon:
 
-￼
 
-
-
-====================================
-
-VI. Merge the change into the code base
+## VI. Merge the change into the code base
 
 When Owner Approval turns green and the required checks pass (Details displays the list of ACL owners):
 
