@@ -1,14 +1,10 @@
----
-layout: page
-title: Docusaurus
-permalink: /docusaurus/
-resource: true
----
+# Docusaurus
+
+An in-repo sit generator built in React.
 
 https://docusaurus.io/
 
-
-# Installation
+## Installation
 
 Article: https://docusaurus.io/docs/installation
 
@@ -30,7 +26,7 @@ $ yarn install
 ```
 
 
-# Build and Deploy
+## Build and Local Deployment
 
 Article: https://docusaurus.io/docs/deployment
 
@@ -48,7 +44,7 @@ Local deploy (for previewing on my mac before pushing to production):
 $ yarn run start
 ```
 
-# Deployment
+## Prod Deployment
 
 The published URL is https://gregmcmillan.github.io/kb/
 
@@ -87,3 +83,10 @@ Save the changes.
 The next time your Docusaurus GitHub Actions workflow runs, it should now have permission to deploy from the "main" branch.
 
 
+## Image Links
+
+```
+![](./images/g1.png)
+```
+
+![](./images/g1.png)

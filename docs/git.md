@@ -1,13 +1,8 @@
----
-layout: page
-title: Git
-permalink: /git/
-resource: true
----
+# Git
 
 The Git protocol was created by [Linus Torvalds](https://en.wikipedia.org/wiki/Linus_Torvalds). He also created the original Linux kernel.
 
-# Installation
+## Installation
  
  Xcode and CLI tools. You might encounter an error message prompting you to install Xcode (or its command line developer tools) because Git relies on some underlying libraries and tools that are bundled with Xcode on macOS.
 
@@ -27,31 +22,61 @@ The Git protocol was created by [Linus Torvalds](https://en.wikipedia.org/wiki/L
 git version 2.50.1 (Apple Git-155)
 ```
 
-# Michael North's git workflow tutorial
+## Setup user
+
+Verify the global `.git/config` looks correct:
+
+```
+$ cat .git/config
+# This is Git's per-user configuration file.
+[user]
+	name = gregmcmillan
+	email = gmcmillan100@gmail.com
+```
+
+Can also do like this:
+
+```
+git config --global user.email "gmcmillan100@gmail.com"
+git config --global user.name "Greg McMillan"
+```
+
+
+## Michael North's git workflow tutorial
 
 Minimum viable workflow:
 
-Get a local copy of a multiproduct
-Prepare a review branch containing that change
-Make a local code change
-Create a pull request
-Get a code review
-Merge the change into the code base
+1. Get a local copy of the code
+2. Prepare a review branch containing that change
+3. Make a local code change
+4. Create a pull request
+5. Get a code review
+6. Merge the change into the code base
 
 
-## I. Get a local copy of a multiproduct
+## Step 1: Get a local copy of the code
 
+```
+git clone git@github.com:gregmcmillan/kb.git 
+```
+
+At LinkedIn, we did this:
+
+```
 $ mint checkout example-w1-python-cli
 ✔ example-w1-python-cli checked out to /Users/gmcmilla/github/example-w1-python-cli_trunk
+```
 
 Go to the MP backend and get the git repo that has already been migrated to GH. I now have my local copy. 
 
+```
 $ cd example-w1-python-cli_trunk/
 gmcmilla-mn2:example-w1-python-cli_trunk gmcmilla$
+```
 
 We know it's an MP because it always ends with trunk
 
-## II. Prepare a review branch containing that change
+## Step 2: Prepare a review branch containing that change
 
 As a best practice, checkout a branch at the very beginning of my workflow and make my commits on that branch. This way I can always return to a clean master if needed. This approach also supports a good starting point for any new task I may need to pick up.
 
@@ -80,7 +105,7 @@ git fetch
 git reset --hard origin/master
 ```
 
-## III. Make a local code change
+## Step 3: Make a local code change
 
 1. Add a README.md file
 
@@ -157,7 +182,7 @@ Date:   Thu Aug 13 18:21:25 2020 -0700
 Note that my master (HEAD -> master) is ahead of GH's master (tag: example-w1-python-cli_0.0.0, origin/master, origin/HEAD). That is, the last I saw of GH's master. I'm further ahead in history.
 
 
-## IV. Create a pull request
+## Step 4: Create a pull request
 
 1. Push my branch and deliver its code to a git remote:
 
@@ -181,13 +206,13 @@ To ssh://linkedin.githubprivate.com/multiproducts/example-w1-python-cli.git
 Branch 'gmcmilla/new-readme-md' set up to track remote branch 'gmcmilla/new-readme-md' from 'origin'.
 ```
 
-The -u argument refers to tracking an upstream branch. My local branch tracks the copy that I pushed to GH. The -u frees me from having to be so specific about my pushes in the future. When I make a future commit, I'll just need to run git push. The system will understand that I want to push to the same branch with the same name on GH. From now on, this is where I want to push.
+The ``-u`` argument refers to tracking an upstream branch. My local branch tracks the copy that I pushed to GH. The -u frees me from having to be so specific about my pushes in the future. When I make a future commit, I'll just need to run git push. The system will understand that I want to push to the same branch with the same name on GH. From now on, this is where I want to push.
 
-The "remote:" prefix refers to activity on the remote side (not local). It's response feedback coming from GH.
+The ``remote:`` prefix refers to activity on the remote side (not local). It's response feedback coming from GH.
 
-"[new branch]" refers to the new branch that was created on GH. The tiny arrow (->) indicates that tracking is enabled. The local branch feeds into the remote branch.
+``[new branch]`` refers to the new branch that was created on GH. The tiny arrow ``(->)`` indicates that tracking is enabled. The local branch feeds into the remote branch.
 
-Tip. Use "git branch -av" to list all of my branches and show which ones are tracking (->) a remote branch. This is useful for cleaning up my local workspace periodically.
+Tip. Use ``git branch -av`` to list all of my branches and show which ones are tracking ``(->)`` a remote branch. This is useful for cleaning up my local workspace periodically.
 
 ```
 $ git branch -av
@@ -210,13 +235,13 @@ A pull request text template, as defined by a referenced file, populates the wri
 
 3. Click "Create pull request"
 
-￼
+![](./images/g1.png)
 
 Alternatively, you can create a draft pull request to request a last-minute sanity review from a fellow developer. It's a pre-review before the formal review begins. A draft pull request has a unique ID and can be shared with others on Slack for collaboration. Drafts cannot be merged.
 
-Look in the "Review requested" area for all of the signals about whether the code is or is not suitable for merge. The problems are listed here.
+Look in the ``Review requested`` area for all of the signals about whether the code is or is not suitable for merge. The problems are listed here:
 
-￼
+![](./images/g2.png)
 
 Owner Approval means I have touched code that is managed by an ACL, and I must get an owner approval in order to merge it.
 
@@ -226,20 +251,21 @@ Working Copy Test is similar to wc-test.
 
 Changes to Resolution is company policy that enables non-owners to raise issues, where the author must respond or explicitly dismiss. A no response it not allowed. 
 
-Tip. git remote -v informs me that I have a remote called origin. Origin is the central source of truth. It was set up for me as part of mint clone (or mint checkout). It's using ssh to communicate with linkedin.githubprivate.com.
+Tip. ``git remote -v`` informs me that I have a remote called origin. Origin is the central source of truth. It was set up for me as part of mint clone (or mint checkout). It's using ssh to communicate with linkedin.githubprivate.com.
 
+```
 $ git remote -v
 origin	ssh://git@linkedin.githubprivate.com/multiproducts/example-w1-python-cli.git (fetch)
 origin	ssh://git@linkedin.githubprivate.com/multiproducts/example-w1-python-cli.git (push)
+```
 
-
-## V. Get a code review
+## Step 5: Get a code review
 
 PR authors cannot approve their own pull requests; only MP owners can do it.
 
 1. Add reviewers to the PR by using the Reviewers drop down menu:
 
-￼
+![](./images/g3.png)
 
 Reviewers are email notified, or you can send the PR's URL directly:
 
@@ -247,58 +273,55 @@ https://linkedin.githubprivate.com/multiproduct/example-w1-python-cli/pull/3
 
 Tips:
 
-o The Files changed tab describes the code changes to be approved.
-
-o Comments can be added in the gutter.
+* The Files changed tab describes the code changes to be approved.
+* Comments can be added in the gutter.
 
 
 2. On the Write tab, an approver will select Approve > Submit review:
 
+![](./images/g4.png)
 
 Tips. 
 
-o To update the PR with new staged changes in the review branch, use git add, git commit, and git push. Because you are already tracking the upstream branch, only a git push (with no -u) is required. Git remembers the destination.
+* To update the PR with new staged changes in the review branch, use git add, git commit, and git push. Because you are already tracking the upstream branch, only a git push (with no ``-u``) is required. Git remembers the destination.
 
-o To re-request a review from someone, click the circular refresh icon:
+* To re-request a review from someone, click the circular refresh icon:
 
+![](./images/g5.png)
 
-## VI. Merge the change into the code base
+## Step 6: Merge the change into the code base
 
 When Owner Approval turns green and the required checks pass (Details displays the list of ACL owners):
 
-￼
+￼![](./images/g6.png)
 
-click Squash and merge to merge your code into master and officially make it part of the multiproduct:
+click ``Squash and merge`` to merge your code into master and officially make it part of the multiproduct:
 
-￼
+![](./images/g7.png)
 
 The timeline reports the number of checks that passed before the merge was initiated:
 
-￼
+![](./images/g8.png)
 
-See also the post-merge validation (PCL) that's running on master after the merge:
+See also the post-merge validation (PCL) that's running on master after the merge. When it succeeds, it looks like this:
 
-￼
+![](./images/g9.png)
 
-When it succeeds, it looks like this:
+If things go bad for you, click the Revert button to create a new branch and reverse (rollback) the change.
 
-￼
+## Updating a PR by Amending to the Previous Commit
 
-If things go bad for you, click the Revert button to create a new branch and reverse (rollback) the change:
-
-￼
-
-
-Updating a PR by Amending to the Previous Commit
 The cleanest way to update files and push up the changes to the same PR is as follows:
-	1	Ensure you’re on the same branch in your local environment as the PR’s branch
-	2	Modify your files
-	3	Run git add -A in terminal
-	4	Run git commit --amend --no-edit. This will bring in your updates to your previous commit. Note that the dashes before amend and no-edit should be 2 dashes in a row.
-	5	Run git push -f
-	6	Validate your updates are reflected in the PR
 
-Updating master to latest
+1. Ensure you’re on the same branch in your local environment as the PR’s branch
+2. Modify your files
+3. Run git add -A in terminal
+4. Run git commit --amend --no-edit. This will bring in your updates to your previous commit. Note that the dashes before amend and no-edit should be 2 dashes in a row.
+5. Run git push -f
+6. Validate your updates are reflected in the PR
+
+## Updating master to latest
+
 Tip. Do this to get master back to the official clean copy (what everyone else sees):
 
 ```
@@ -321,7 +344,7 @@ Your branch is behind 'origin/master' by 12 commits, and can be fast-forwarded.
 
 ## Updating .git
 
-Use git fetch to update your .git directory with all commit history from the remote branch that does not exist in your local repository. This command will not change any local content files:
+Use ``git fetch`` to update your .git directory with all commit history from the remote branch that does not exist in your local repository. This command will not change any local content files:
 
 ```
 $ git fetch
@@ -339,7 +362,6 @@ From github.com:MicrosoftDocs/linkedin-apidocs-test
  * [new branch]      nkamadolli      -> origin/nkamadolli
 ```
 
-Pull in changes from the master branch into your existing local branch
 Pull in changes from the master branch into your existing local branch after you’ve created a PR. (only needed if you want to make further changes to this PR)
 
 ```
@@ -353,48 +375,18 @@ $ git push (push to remote branch, PR gets automatically updated)
 Note: if "git push" fails saying your local branch is behind, do a "git pull --rebase" and try again. Do not do a "git pull"!
 ```
 
-# Access
-
-repo, https://github.com/gmcmillan100/docs
-
-pages, https://gmcmillan100.github.io/docs/
-
-Test ssh access:
-
-```
-$ ssh -T git@github.com
-Hi gmcmillan100! You've successfully authenticated, but GitHub does not provide shell access.
-```
-
-# Branch out of sync with master
+## Branch out of sync with master
 
 Do this to bring the lastest changes in master into your local Git branch:
 
+```
 git checkout master
 git pull
 git checkout ``<your-branch-name>``
 git rebase master
-
-# Setup Workflow
-
-Global config:
-
-```
-git config --global user.email "gmcmillan100@gmail.com"
-git config --global user.name "Greg McMillan"
 ```
 
-Verify the global `.gitconfig` looks correct:
-
-```
-$ cat .gitconfig
-# This is Git's per-user configuration file.
-[user]
-	name = gmcmillan100
-	email = gmcmillan100@gmail.com
-```
-
-Initialize repo and pull down a copy:
+## Initialize repo and pull down a copy:
 
 ~~~~
 mkdir docs
@@ -421,13 +413,13 @@ git pull --rebase
 git push
 ~~~~
 
-# SSH Keys
+## SSH Keys
 
 Main article: https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/#platform-linux
 
 Generate a new ssh key:
 
-~~~~
+```
 $ ssh-keygen -t rsa -b 4096 -C "gmcmillan100@gmail.com"
 Generating public/private rsa key pair.
 
@@ -449,11 +441,11 @@ The key's randomart image is:
 |        +=* ..  o|
 |       .+B++..E+ |
 +-----------------+
-~~~~
+```
 
 Display existing key files:
 
-~~~~
+```
 $ ls -al ~/.ssh
 total 20
 drwx------  2 greg  greg   512 Jan  2 15:27 .
@@ -461,27 +453,27 @@ drwxr-xr-x  4 greg  greg   512 Jan  1 07:12 ..
 -rw-------  1 greg  greg  3326 Jan  2 15:27 id_rsa
 -rw-r--r--  1 greg  greg   748 Jan  2 15:27 id_rsa.pub
 -rw-r--r--  1 greg  greg  1014 Jan  2 15:17 known_hosts
-~~~~
+```
 
 Start the ssh-agent and add the new key:
 
-~~~~
+```
 $ eval "$(ssh-agent -s)"
 Agent pid 1034
 
 $ ssh-add ~/.ssh/id_rsa
 Enter passphrase for /home/greg/.ssh/id_rsa: 
 Identity added: /home/greg/.ssh/id_rsa (/home/greg/.ssh/id_rsa)
-~~~~
+```
 
 Display the new public key:
 
-~~~~
+```
 $ cat ~/.ssh/id_rsa.pub 
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDF+17iqUOfTtcjlAEDFBNh23qXqn7WGVaXqKMEMIOtezOrHTsS4TF1vLE0aQDXKjlv1JKi1PBm5ueIr+xe+WTswXRjg5dU2iijkeBLVZKo//7HCXY+W5nNO0wCKMNmnng2JwzhGW28FpwafnuhbHahzL1R8fkYUms4qsYQCoMP+femNr1aWEv9nOs7atpXjugrmhQXwZmuUOkci3pYmOXrrDZxko2EVMaSA03mN48uxQ0ZbPn6L06gzu26cZa2Wip79NmlT/+Ilc8qnjH0MahHpXe1k/fX+3VT9IYMomekOP5jTFuZpNtzrzukSnmkjBABH7Esgo+6TSp3vjOVBm8mEQk4KvUyc8s+POY4jrZr8Z8SRFQAo6XfSs0jPhxe7VIkwIt0oV1jOb0g0x/tudpf/byFWjqmQcFh27MIzf4rsPBt+sP6Tyg59Fn6nqC0UhofuxY3rkLtVnBK6VtiKoPdK1xkSJ4vRi7GzOOMe3txOClR9k0Afdj3Oa9q8GTbXjXc65NsMj33eoHnl/f1O1nHo7gFBaPBDvaSCf16sJ6UwrLy2ZfH0cJuFk9Vfp24Sb8L5o5IL8EoY3ydX1UpXEVtxU4140780mWZKgfThxGjO5xTygLs8BcymkN0ZS+RGrocH7sTf7LIzikY1cGBeBs60BaOs90sxROjPnwpTIXqRQ== gmcmillan100@gmail.com
-~~~~
+```
 
-# Test key-account auth
+## Test SSH key auth
 
 After adding the key to github.com > settings, verify Github can see the key-account mapping from my local host:
 
@@ -503,11 +495,11 @@ $ ssh -i ~/.ssh/gmcmilla_at_linkedin.com_ssh_key -o IdentityAgent=none -T git@gi
 Hi gmcmilla_LinkedIn! You've successfully authenticated, but GitHub does not provide shell access.
 ```
 
-# Cloning
+## Cloning
 
 git clone git@github.com:gmcmillan100/docs.git
 
-# Multiple SSH keys for different accounts
+## Multiple SSH keys for different accounts
 
 Problem. During a `git push` in my personal `docs` repo, git was using my work ssh key and user identity. My personal key identity was not being used, resulting in no access.
 
