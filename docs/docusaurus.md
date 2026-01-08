@@ -1,6 +1,6 @@
 # Docusaurus
 
-An in-repo sit generator built in React.
+A React in-repo site generator used for docs and dynamic knowledge bases.
 
 https://docusaurus.io/
 
@@ -25,26 +25,25 @@ Don't forget to install Yarn and auto-gen a `yarn.lock` file:
 $ yarn install
 ```
 
-
-## Build and Local Deployment
-
-Article: https://docusaurus.io/docs/deployment
-
-Use Yarn (not npm) because it scales better and LinkedIn's Docusaurus implementation uses it.
-
-Local build:
+## Build
 
 ```
 $ yarn build
 ```
 
-Local deploy (for previewing on my mac before pushing to production):
+## Local Deployment
 
 ```
 $ yarn run start
 ```
 
+Good for previewing and debugging the changes on my mac before pushing them to production.
+
 ## Prod Deployment
+
+Use Yarn (not npm) because it scales better and LinkedIn's Docusaurus implementation uses it.
+
+Article: https://docusaurus.io/docs/deployment
 
 The published URL is https://gregmcmillan.github.io/kb/
 

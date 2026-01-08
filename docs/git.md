@@ -22,7 +22,7 @@ The Git protocol was created by [Linus Torvalds](https://en.wikipedia.org/wiki/L
 git version 2.50.1 (Apple Git-155)
 ```
 
-## Setup user
+## User setup
 
 Verify the global `.git/config` looks correct:
 
@@ -40,7 +40,6 @@ Can also do like this:
 git config --global user.email "gmcmillan100@gmail.com"
 git config --global user.name "Greg McMillan"
 ```
-
 
 ## Michael North's git workflow tutorial
 
@@ -331,7 +330,7 @@ git fetch
 git pull --rebase
 ```
 
-## Switching to a Different Branch
+## Switching to a different branch
 
 Use ``git checkout <branch-name>`` to switch between branches:
 
@@ -413,11 +412,21 @@ git pull --rebase
 git push
 ~~~~
 
-## SSH Keys
+## SSH keys
+
+### Enter passphrase many
+
+If SSH keeps asking for passphrase during ``git push``, silence it by permanantly add my private key to ``ssh-add``:
+
+```
+% ssh-add --apple-use-keychain ~/.ssh/id_rsa
+Enter passphrase for /Users/greg/.ssh/id_rsa: 
+Identity added: /Users/greg/.ssh/id_rsa (gmcmillan100@gmail.com)
+```
 
 Main article: https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/#platform-linux
 
-Generate a new ssh key:
+### Generate a new ssh key
 
 ```
 $ ssh-keygen -t rsa -b 4096 -C "gmcmillan100@gmail.com"
@@ -473,7 +482,7 @@ $ cat ~/.ssh/id_rsa.pub
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDF+17iqUOfTtcjlAEDFBNh23qXqn7WGVaXqKMEMIOtezOrHTsS4TF1vLE0aQDXKjlv1JKi1PBm5ueIr+xe+WTswXRjg5dU2iijkeBLVZKo//7HCXY+W5nNO0wCKMNmnng2JwzhGW28FpwafnuhbHahzL1R8fkYUms4qsYQCoMP+femNr1aWEv9nOs7atpXjugrmhQXwZmuUOkci3pYmOXrrDZxko2EVMaSA03mN48uxQ0ZbPn6L06gzu26cZa2Wip79NmlT/+Ilc8qnjH0MahHpXe1k/fX+3VT9IYMomekOP5jTFuZpNtzrzukSnmkjBABH7Esgo+6TSp3vjOVBm8mEQk4KvUyc8s+POY4jrZr8Z8SRFQAo6XfSs0jPhxe7VIkwIt0oV1jOb0g0x/tudpf/byFWjqmQcFh27MIzf4rsPBt+sP6Tyg59Fn6nqC0UhofuxY3rkLtVnBK6VtiKoPdK1xkSJ4vRi7GzOOMe3txOClR9k0Afdj3Oa9q8GTbXjXc65NsMj33eoHnl/f1O1nHo7gFBaPBDvaSCf16sJ6UwrLy2ZfH0cJuFk9Vfp24Sb8L5o5IL8EoY3ydX1UpXEVtxU4140780mWZKgfThxGjO5xTygLs8BcymkN0ZS+RGrocH7sTf7LIzikY1cGBeBs60BaOs90sxROjPnwpTIXqRQ== gmcmillan100@gmail.com
 ```
 
-## Test SSH key auth
+### Test SSH key auth
 
 After adding the key to github.com > settings, verify Github can see the key-account mapping from my local host:
 
@@ -495,11 +504,7 @@ $ ssh -i ~/.ssh/gmcmilla_at_linkedin.com_ssh_key -o IdentityAgent=none -T git@gi
 Hi gmcmilla_LinkedIn! You've successfully authenticated, but GitHub does not provide shell access.
 ```
 
-## Cloning
-
-git clone git@github.com:gmcmillan100/docs.git
-
-## Multiple SSH keys for different accounts
+### Multiple SSH keys for different accounts
 
 Problem. During a `git push` in my personal `docs` repo, git was using my work ssh key and user identity. My personal key identity was not being used, resulting in no access.
 
