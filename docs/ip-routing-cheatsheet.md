@@ -1,14 +1,8 @@
-# IP routing cheat sheet
+# IP routing essentials
 
-## tli IP history
+Shared knowlege from experts at Procket Networks while I worked there.
 
-First, IP was designed to survive nuclear attack in DoD networks. It
-was NOT designed for the enterprise network. Second, in any well
-designed IP network, there are also redundancies. The redundancy
-strategy is typically very different, but when well executed provides
-a service that is quite robust.
-
-## IP Routing Terms
+## IP routing terms
 
 Networks, subnets, and hosts. To break an IP address up into those
 parts, you must use a Subnet Mask. There are special broadcast
@@ -103,7 +97,7 @@ subnet	     10.1.0.0	A term that usually refers to setting up an
 			large parent network.
 ```
 
-## Routing 101 Basics
+## IP routing 101 basics
 
 An IP route lookup describes how a router looks up a route based on a prefix.
 
@@ -230,6 +224,597 @@ IP. When we're doing software switching, packets are coming in out of
 IP, IP says here's a packet, IP looks up the destination address in
 the routing table, an IP forwards the packet.
 
+## Tony Li history lessons and viewpoints
+
+### IP
+First, IP was designed to survive nuclear attack in DoD networks. It
+was NOT designed for the enterprise network. Second, in any well
+designed IP network, there are also redundancies. The redundancy
+strategy is typically very different, but when well executed provides
+a service that is quite robust.
+
+### Growth of the Internet
+
+http://www.dtc.umn.edu/~odlyzko/doc/itcom.internet.growth.pdf
+
+According to the best available numbers, the Internet is continuing to
+grow exponentially at 100%/year. If the market needs a terabit machine
+today, then it will need 2 terabits next year, four the year after
+that, then 8, then 16, 32, 64, etc.
+
+The control plane workload continues to grow rapidly because
+some folks continue to find more ways to spend control plane
+cycles. If folks would commit to not adding new features, we could
+probably stop. Or at least not grow faster than Moore's law. Since
+that's not going to happen, the control plane will always need more
+cycles.
+
+### Netheads vs bellheads
+
+There's a limit to what packet
+switching can and should be used for. Use the right tool for the job
+at hand, taking cost, reliability, speed, etc. into account. Do I
+really want my bank running transactions over the Internet? Not
+without some crypto than is far stronger than what I know of. Do I
+want my 911 call routed over the Internet? No thank you, the
+technology is too immature and frankly, that's one thing that I'm just
+not willing to gamble with yet. Give it another 100 years or so.
+
+Just because you CAN do something doesn't make it the best way to do
+something. As someone very wise once taught me: "Don't fall in love
+with the technology. There's always something better around the bend."
+Turning things into a religious debate is NOT the sign of a good
+engineer. A good engineer should be trying to look at things as
+objectively as possible, understand that all technologies have
+limitations, and optimize to meet requirements. That's it.
+
+### Packet network vs circuit network
+
+You ask why we should consider merging technologies. The
+economic answers are clear: running two networks is more
+expensive than one. The carriers must cut costs somehow. Even if
+the result is that most new deployments go to the packet network
+while legacy and life-critical deployments stay on the circuit
+network, the carriers will be able to avoid extremely costly capacity
+upgrades to the circuit side.
+
+Thus, the future will be a mixture: the circuit side will continue to
+support some services and it will not get decomissioned in anything
+like our lifetime. Most new services will be deployed on the packet
+network. And all of this feuding is pretty much for naught, because
+the economics of the situation are pretty compelling.
+
+### BGP 
+
+Time for a reality check. As the aforementioned cisco employee
+who was 'pushing' BGP, you should know that there wasn't anyone
+in marketing who cared in the least about BGP. I was working on it
+because I knew of the shortcomings of EGP and wanted to help
+grow the Internet. Plain and simple. All of the features (a.k.a., hacks)
+that went into it were the result of customer requests. Those
+features were subsequently documented as part of the normal
+documentation process.
+
+Changes that actually changed the _protocol_ (as opposed to the
+implementation) were reflected in the spec, to the best of our
+abilities. 
+
+I realize that this doesn't fit in well with everyone's paranoid
+conspiracy theories about Cisco market domination. But it is the
+plain and simple truth.
+
+
+from Hyperunner:
+
+By allowing Cisco's implementation (of whatever protocol) to be
+adopted as the standard, the IETF fell down on its job. The
+competition were just as delinquent in their duty, because they let
+Cisco and the IETF get away with it.
+
+Hyperunner,
+
+Yes, the competition was not keeping up. However, your language
+implies that there was something underhanded or improper about
+what was going on. Frankly, the competition simply under-invested
+in the Arpanet because they did not see the eventual commercial
+implications. And to continue being frank, I didn't and Cisco didn't
+either.
+
+BGP was simply a solution to an interesting and challenging routing
+problem. Yes, it would turn out to be necessary for the Internet, but
+without the emergence of the Web, it was simply glue for holding
+our 'geek network' together.
+
+Tony
+
+### ATM
+
+MPLS will not ever match ATM's QoS guarantees. But, are
+those guarantees really necessary? An effective QoS scheme may
+be far simpler than what ATM presents us with. Unless you're
+interested in the academic side of the equation, the pragmatic
+engineer needs to concern himherself to fulfilling the real
+requirements placed on the network.
+
+Right now, those requirements are to minimize but not eliminate
+jitter and to bound latency. In a packet network, this is reasonably
+done by giving these packets high priority as part of the queueing
+discipline and a shortened queue length (as compared to best effort
+traffic). MPLS EXP bits can be effectively used to provide the
+marking information necessary to differentiate such packets. So, for
+all practical purposes today, meeting practical requirements is not
+hard.
+
+Note: If you want to argue about the efficiencies of cells, you
+have to take the cost of inefficiency into account. If you want to
+send a cell across an electrical backplane, you need to provision a
+certain amount of excess capacity on that backplane. This is
+relatively cheap. If you want to send a cell across a LH network, then
+you have to provision that extra inefficiency in LH bandwidth. That's
+expensive. Cells are agnostic. They have advantages and disadvantages. Folks who
+have a religion and don't evaluate technology on its true merits are
+condemned to preach forever.
+
+For its internal cell switching, a packet rocket router does not use ATM
+53-byte cells. The cell size is 30 Bytes of payload plus
+overhead. This size efficiently uses Dynamic Random-Access Memory
+(DRAM) bandwidth and avoids IP fragmentation overhead. Unlike packet router, when cells are much larger than the packets getting
+presented, DRAM bandwidth is wasted.
+
+### Wireless
+
+The future of networking will be driven by the need for more
+bandwidth at ever decreasing costs. The resulting technology will
+still be called Ethernet.
+
+Innovators will find a practical wireless last-mile solution. This will
+spell the death knell for the RBOC's.
+
+We don't have broadband wireless covering 80% of the population
+yet. If and when wireless becomes the de facto distribution for last
+mile broadband, then VoIP over wireless will be part of the standard
+flat rate Internet access fee. The incremental cost of the VoIP call
+will be zero.
+
+"Free service" and it is true. There are no incremental costs above
+and beyond an existing broadband connection and flat rate Internet
+access fee.
+
+### VoIP vs POTs vs Cell Phone
+
+The case for VoIP is quite clear and it arrives in the mail monthly. If I
+can make phone calls and not pay POTS rates for them, then that
+should make my bill cheaper. As a consumer, I can make the choice
+of the technology that I want to use to make my call. Yes, VoIP is
+not identical to analog, but for the vast majority of situations, it's
+perfectly adequate. This is acceptable to the vast majority of
+consumers. Consider cell phones. The quality of the call and the
+reliability are nowhere near matching the average land line.
+However, consumers are willing to pay more for the feature of
+mobility. The consumer can and quite reasonably will enjoy some
+economic benefit from VoIP. And that's what makes this technology
+compelling. Even at $.05 a minute, long distance costs too much.
+
+I'll also point out that I've visited several large organizations where
+they've deployed VoIP for their own internal usage. They find that it
+simplifies the wiring problem and has proven reasonably reliable.
+While it has less of an impact on their long distance bills (because
+the folks that they are calling are still on POTS), even the cost
+improvements due to savings on internal phone calls and location
+flexibility have paid off handsomely. Once the technology matures a
+bit, watch out.
+
+Again, let me point you to the folks who already have Internet access
+and can download a softphone for VoIP. Fact: you can get into VoIP these days for not
+much more than the cost of a headset. Yes, startup costs will deter
+some. But for the early adopters, this is not that much of an issue.
+Folks are already installing broadband just for Internet access. VoIP
+is just a bit more possible value added to the mix. I should also
+point out that a) micro optimization is EXACTLY what this is all about
+-- you're going to think about how you make your phone call exactly
+because someone is pinching pennies
+
+Then someone else on lightreading said:
+```
+Since this is a predictive statement, I can not argue against this. But
+I would like to know why. Is it because, those services can not be
+supported in the TDM environment? If so, can you give an example
+of such services?
+```
+
+Look, whatever you want to call it, I want to be able to make a
+phone call for less. For the same call, the VoIP call is cheaper than
+the PSTN call. Yes, ok, I sacrifice QoS, but then again, I'm happy to
+sacrifice it if my call isn't life-threatening.
+
+Hmmm... And if I'm willing to live without "reliability and QoS" I can
+use my cell (for more money, but with mobility) or I can use VoIP for
+free. Well, I know what I'm going to choose. ;-)
+
+Actually, what will be really interesting is when we have a wireless
+last mile deployed and can have mobile VoIP. That should be truly fun.
+
+Well, all that I'm arguing is that with VoIP, I can also make the
+trade-off. I haven't been watching the cell world closely, but have
+folks actually been able to raise their prices because of quality
+improvements? As far as I can tell prices are stable or falling.
+
+### Enterprise market
+
+mass market = residential access
+
+Sorry, no. The mass market for networking gear is the Enterprise. The
+internal bandwidth of an office building frequently is several orders
+of magnitude more than its external bandwidth. Similarly, the number
+of Ethernet ports sold into Enterprises far exceeds the sum total of
+all ports bought by carriers for core, access and aggregation
+combined. 
+
+As with all things silicon, costs are driven by volume. The Enterprise
+chose Ethernet (no matter what the real technology is, we'll call it
+Ethernet ;-), and that drives the volume and that drives CoGS and in
+turn end user prices. 
+
+As soon as you do something outside the volume envelope, your costs go
+way up. That little phrase "carrier grade" is a 10x price multiplier.
+
+### SW release maintenance issues
+
+There's no such thing as not affecting a release.  Everytime
+a software engineer fixes a bug, there's a 20% chance that
+he's introducing another bug that's just as bad.  [I'd argue
+that the real number is more like 50% -- whatever.]
+
+This is simply a fact of life.  Until such time as computers
+can program themselves, we have to have humans work on them.  And
+humans make mistakes.  Without the ability to somehow magically
+*KNOW* that we are not introducing a regression, we will break things.
+And that pisses off customers far more than anything else.
+
+Well, what we're doing is exactly the opposite: you have to
+justify why a fix should go into a shipping release.  As you
+point out, it's a cosmetic bug and we didn't find that level
+of justification.  If folks want to avoid the hop scotch, then
+they need to stay with a single, stable release.  That means
+that they will have to work around cosmetic issues.  If they're
+not willing to do that, then we have an issue.  We can't
+provide stability and all patches at the same time.  IOS tried
+and you see the result.
+
+### Forklift upgrades
+
+The history of this market is somewhat interesting and relevant. At
+any point in time, the industry is capable of producing a router at
+the (reasonable) limits of technology. That improves over time.
+However, when the next generation of technology is released, the
+customer is typically presented with a forklift upgrade, where older
+systems must either be scrapped or reassigned to other tasks where
+they are not operating at their optimal design points.
+
+Thus, the goal that many of us aspire to is to create a system that
+scales in a 'nice' fashion so that forklift upgrades are avoided. Thus,
+yes, we are discussing architectures that are not necessary
+immediately. Perhaps, depending on how large we scale, not for
+years or even decades. Consider it a long term investment in
+technology.
+
+```
+HFR = 64 OC-192s in a 7 ft rack
+T640 = 32 OC-192s/chassis x 2 per rack = 64/rack
+8812 = 48 OC-192s/chassis x 2 per rack = 96/rack
+```
+
+Juniper routers fit in a 19" rack though, so does Avici and Packet rocket.
+
+Buy a platform that has room for expansion and a lifetime in their
+network that exceeds the depreciation cycle of the gear.
+
+If you're trying to perform an apples to apples comparison that
+matters, then let's think about what can be fit into 3 full racks. I
+suspect that HFR will get two chassis of interfaces and a full rack of
+interconnect, giving it 128 OC-192s.
+
+Juniper would get 5 T640's plus the TX, for 160.
+
+Packet rocket would get 5 8812 plus , for 240.
+
+Bottom line: what starts out as a small density advantage will pay
+handsomely when you look at interesting multipliers. Yes, at the small
+scale, all architectures will have a nasty discontinuity right at the
+point where they hit the next quantum of bandwidth, but in the long
+run, this is less of a factor than overall density.
+  
+Number of Electra interfaces per MA:
+```
+10 GigE per MA
+
+1 10GigE per MA
+
+4 OC-48 per MA
+
+1 OC-192 per MA
+```
+The total throughput per Line Card is 40G. 
+
+## Future network architectures, pains, and trends
+
+This summary is the bulk of the feedback that tli and dino have heard
+from customers over the past 10 years.
+
+### Future Architectures
+
+Assumptions
+
+  Continued 100%/yr growth of the Internet (back to pre bubble
+  days. But it's very hard to gauge this number. Many customers are
+  changing ISPs. As customers change, one ISP's growth rate goes
+  down while another goes up.)
+
+  Slow convergence of other services. ATM failed, and the big
+  bandwidth user changed everything.
+
+  An unlit fiber glut. Many green fields companies dug the trenches and
+  laid the fiber, but they very wisely did not purchase the electronics that go
+  on both ends of the fiber. DWDM gear, routers, muxes, telco
+  gear. Alot of money goes into lighting up the fiber. 
+
+  CapEx shortage. Equipment cost.
+
+  OpEx shortage. What it actually takes to run and operate the
+  network. The CapEx and OpEx are generally about equal in
+  cost. Companies spend about as much money in labor for their
+  operations and engineering staff as they do for their equipment
+  costs. Packet rocket will try to shrink the OpEx part, which is a huge
+  win. Making our boxes easier to use and manage. 
+
+  Carrier OpEx costs are dominated by labor costs.  The more we can do
+  to help the Carrier automate system management, the better.
+
+Drivers
+
+  Decrease CapEx and OpEx
+
+  Continue to grow
+
+  Fold in legacy services to maintain higher margin. Anything we can
+  do to bring the IP and ATM networks together is a good thing. But it
+  will not happen over ATM. Running two networks is more than twice as
+  hard as running one. 
+
+Packets an Chips
+
+For its internal cell switching, a Packet rocket router does not use ATM
+53-byte cells. Packet rocket's cell size is 30 Bytes of payload plus
+overhead. This size efficiently uses Dynamic Random-Access Memory
+(DRAM) bandwidth and avoids IP fragmentation overhead. Unlike a
+Packet rocket router, when cells are much larger than the packets getting
+presented, DRAM bandwidth is wasted.
+
+A fully loaded Atlas router contains 2 RP cards, 3 Switch Cards, 12
+Line Cards, and 48 MAs. Each RP card contains a PowerPC CPU and a CPI
+chip. Each Switch Card has 1 Striper and 12 Memory Controller Unit
+(MCU) chips. Each Line Card supports 1 LCU, 1 NPU, and a maximum of 4
+Media Adapter (MA) cards. Each MA card contains 1 Glue Adaptor (GA)
+chip. The communication to various chips is done through High Speed
+Serial Links (HSSL). From a software perspective, each chip is
+identified by a combination of board ID and chip ID. 
+
+In a full system, each Striper communicates with 8 of 12 NPUs. Each
+Striper communicates with a different set of 8, and at most 4
+overlapping NPUs with any other Striper. Therefore, at least 2
+Stripers are needed to cover all 12 NPUs. Instead of one Striper to
+communicate with 8 NPUs and the other to communicate with the
+remaining 4 NPUs, the Stripers does load balancing, where each Striper
+communicates with 6 NPUs each. There can be a third Striper in the
+system as a standby Striper, and it would be switched into service if
+either of the other two Stripers failed. Each Striper listens to at
+most 6 specific NPUs for any given configuration. This redundancy
+scheme is described as 2+1 Switch Card redundancy.
+
+### Decreasing CapEx and OpEx While Growing
+
+Buy more efficient gear
+
+  Metrics
+  CapEx
+  Power
+
+  Cooling is a major expense in running a POP. It is almost 1/2 the
+  cost of running the POP HVAC. Figuring out a way to take the heat
+  generated by the equipment out of the building, which takes even
+  more power. 
+
+  Rack space. A central office has a finite size. 
+
+Make it easier to manage
+
+  Fewer boxes to manage. Think about it. In my personal life, do I want to manage one
+  account to pay off each one of my bills? Or do I have one checking
+  account? One thing to manage, even if it has more things in it, is
+  easier than more things to manage. Packet rocket will help customers
+  decrease the number of systems they need to manage. 
+
+  Increase flexibility
+
+  Decrease release management overhead. Customers spends 30-40% of
+  their network engineering time just trying to figure out
+  which sw release to run. "Oh, this image does not work in this part
+  of the network because of this bug. But it'll work over here because
+  we don't use that." Packet rocket will give customers sw images that they
+  don't have to think about. 
+
+  Improve reliability for sw and hw
+
+### Growth
+
+Moore's Law definition:
+
+The observation that the logic density of silicon integrated circuits
+has closely followed the curve (bits per square inch) = 2^(t - 1962)
+where t is time in years; that is, the amount of information storable
+on a given amount of silicon has roughly doubled every year since the
+technology was invented. This relation, first uttered in 1964 by
+semiconductor engineer Gordon Moore (who co-founded Intel four years
+later) held until the late 1970s, at which point the doubling period
+slowed to 18 months. The doubling period remained at that value
+through time of writing (late 1999). Moore's Law is apparently
+self-fulfilling. The implication is that somebody, somewhere is going
+to be able to build a better chip than you if you rest on your
+laurels, so you'd better start pushing hard on the problem. 
+
+tli:
+
+The growth rate is working against us. 100% growth is higher than
+moore's law. We can't keep up with the growth rate simply by turning
+up the hardware. Serial link technology doubles about once every 2
+years. Silicon is once per 2 months. 
+
+   100%/yr >> Moore's law >> Backplane technology
+
+Backplane technology is growing a much slower rate than Moore's
+law. Moore's law is growing much slower than 100% per year. In
+summary, routing technology can't keep up. 
+
+   100%/yr >> D Bandwidth/Power 
+
+If you look at the amount of Bandwidth that we get per watt, that is
+not improving faster than 100%. Boxes keep getting hotter.
+
+   100%/yr >> D Bandwidth/Volume
+
+   Technology improvements work against CapEx. They raise system
+   prices. Decreasing OpEx implies increased system complexity, which
+   hurts system reliability. There are many trade offs.
+
+We are reaching a point were we can't cram more and more stuff into
+tighter boxes. It won't scale. Physics will not allow it. To decrease
+OpEx, we will make the system more intelligent so it takes less effort
+to manage it. 
+
+### Resolutions
+
+Continued system growth
+
+Limitations on physical features drive hardware clusters
+
+Software clusters decrease OpEx by reducing boxes. Interconnect a
+handful of Atlases, interconnect them with existing MAs, and write
+some software so the entire thing behaves as one router. To the
+operations folks who are 3,000 miles away from the system, it should
+feel like a single router. This clustering will decrease OpEx.
+
+Bleeding edge technology, just one or two generations behind
+microprocessors because we want something that is reliable and
+stable. Be a little behind the curve. 
+
+Merged services over IP and MPLS. IP alone will not do it. ISPs will
+run voice and VPNs over the network. 
+
+Clusters decrease need for POP interconnect and optical
+switching. That is, many many Atlas racks of equipment functioning as
+one router. Non revenue interfaces interconnect the different boxes. The
+hardware cluster fabric itself becomes the primary entire bandwidth
+for the POP. After we eliminate the optical switch, we can allow any
+DWDM port to connect with any router port. We'll have true any-to-any
+bandwidth after we cluster the routers together. All the router ports
+will be equivalent. There is no point to connecting an optical switch
+to a cluster. No need to shift fiber from router to router, because
+it's all "one router."
+
+Packet rocket is designing to 1 petabit of bandwidth and
+this will require 2084 Pro/8812's (or equivalents).
+
+### Our Direction
+
+Seymour cluster based on Atlas/Gordon/Electra
+Preserve CapEx in Chassis, LC, MA, & RP
+Software clustering (all routers managed as one system)
+Hardware clustering w/ fiber interconnect
+Upgrade via switch card swap
+Increasing interface speeds and diversity. OC-768
+Increasing density while clustering. New processing technology.
+Improved backhaul and edge density
+ 
+The interconnect cost between the edge box and the core box is killing
+customers. Customers need to integrate their edge boxes into the
+core. If we take this to its logical conclusion, we end up with only 1
+box in the POP. The "box" is redundant, reliable, core interfaces,
+edge interfaces, and its extensible (it grows as the provider
+grows). Imagine one box providing all the bandwidth needs for the
+entire Bay Area. It's all about delivering bits. Delivering more
+bandwidth more efficiently. 
+
+### Industry issues:  defining the problem 
+
+Has the new router hardware introduction rate kept up with traffic
+increase rate?
+Are routers scaling fast enough?  
+Are routers getting simpler at the core? From a functionality
+standpoint, are they doing less? Do you want this to change?
+Despite management complexity, are VPNs generating revenue?
+Does Traffic Engineering address your needs? Is it easy to manage?
+
+Answer: No. Most ISPs are hurting on OC-192 port count. Today they can't look
+at packets at line rate. They need to count packets, and it's been a
+longgggg wait. Need a way to count packets on a per prefix and per AS
+basis. Want this ability in hardware. Been requesting this for a long
+time. Need cluster solutions that are easy to manage. 4 to 10 routers
+per POP. Vendors need to stop hyping 99999.
+
+Is BGP scaling? What areas cause a big problem?
+Answer: BGP has been forced to do so much. Nothing should
+change. However, the iBGP mesh explodes as the number of routers
+increase in the POP. Customers need a much simpler way of
+consolidating. 
+
+Should we have simpler routers in the core?
+Answer: Not at all
+
+Are VPNs generating any revenue?
+Answer: No. But a CPE based IPsec VPN is the future. And that, will
+generate revenue.
+
+Is TE needed in the core?
+Answer: No. However, none of the customers came from a Telco background.
+
+How is IGP stability? What new features do you want in IGPs?
+Answer: No new features are needed. 
+
+Do you think IPv6 is solving any of these problems? If not, is this
+where we should go to solve the problem?
+
+Is edge bandwidth growing at a faster rate than at the core?
+Answer: The core is growing 3-4Xs faster than the edge. 
+
+Are today's routers easier to manage?
+Answer: No. The biggest problem that ISPs have with vendors is getting
+stable features sooner.
+
+Is software still the primary reason for router failure?
+Answer: No. 40% of the new boards are Dead On Arrival (DOA). 
+
+Do you believe in redundant RP solutions? How much effort should be
+spent?
+
+Do you need QoS, and if so, what kind is it?
+Answer: There was total silence in the room. 
+
+What trend shifts do you see in the ISP business?
+Answer: Most of the consolidation is done in the service provider
+business. However, there will be more bad news before it's done. 
+
+Is North America influenced by international network designs?
+Answer: Most international designs are copy cats of North America
+design. 
+
+Has public vs private peering changed over the last 3 years?
+
+Are L2 switches still integral to your backbone design? What about
+ATM and optical switches?
+Answer: yes. 
+
+Does router clustering address your concerns with managing too much
+equipment? Or, is L1 and L2 integration sufficient?
 
 ## Why Route Optimize Using CSPF and MPLS?
 
@@ -469,44 +1054,6 @@ and PBX's and Centrex. It's not really my area, but it's pretty clear
 that there's gotta be a better way. UUnet cleaned up by selling T1's
 for Internet access. Someone else, with the right model, can do the
 same for VoIP.
-
-
-## ATM
-
-tli
-
-  MPLS will not ever match ATM's QoS guarantees. But, are
-  those guarantees really necessary? An effective QoS scheme may
-  be far simpler than what ATM presents us with. Unless you're
-  interested in the academic side of the equation, the pragmatic
-  engineer needs to concern himherself to fulfilling the real
-  requirements placed on the network.
-
-  Right now, those requirements are to minimize but not eliminate
-  jitter and to bound latency. In a packet network, this is reasonably
-  done by giving these packets high priority as part of the queueing
-  discipline and a shortened queue length (as compared to best effort
-  traffic). MPLS EXP bits can be effectively used to provide the
-  marking information necessary to differentiate such packets. So, for
-  all practical purposes today, meeting practical requirements is not
-  hard.
-
-Note: If you want to argue about the efficiencies of cells, you
-have to take the cost of inefficiency into account. If you want to
-send a cell across an electrical backplane, you need to provision a
-certain amount of excess capacity on that backplane. This is
-relatively cheap. If you want to send a cell across a LH network, then
-you have to provision that extra inefficiency in LH bandwidth. That's
-expensive. Cells are agnostic. They have advantages and disadvantages. Folks who
-have a religion and don't evaluate technology on its true merits are
-condemned to preach forever.
-
-For its internal cell switching, a packet rocket router does not use ATM
-53-byte cells. The cell size is 30 Bytes of payload plus
-overhead. This size efficiently uses Dynamic Random-Access Memory
-(DRAM) bandwidth and avoids IP fragmentation overhead. Unlike packet router, when cells are much larger than the packets getting
-presented, DRAM bandwidth is wasted.
-
 
 ## IGP Notes
 
@@ -1027,465 +1574,11 @@ from dino to innet email regarding KT wanting 2547
     So that means they can put Juniper boxes at the edge, and use Packet rocket in
     the core moving MPLS packets at line rate. Do you agree?
 
+## Multicast test scenarios
 
-## Future Network Architectures, Pains, and Trends
+From Dino for very important potential customers
 
-This summary is the bulk of the feedback that tli and dino have heard
-from customers over the past 10 years.
-
-10.1 Future Architectures
-
-Assumptions
-
-  Continued 100%/yr growth of the Internet (back to pre bubble
-  days. But it's very hard to gauge this number. Many customers are
-  changing ISPs. As customers change, one ISP's growth rate goes
-  down while another goes up.)
-
-  Slow convergence of other services. ATM failed, and the big
-  bandwidth user changed everything.
-
-  An unlit fiber glut. Many green fields companies dug the trenches and
-  laid the fiber, but they very wisely did not purchase the electronics that go
-  on both ends of the fiber. DWDM gear, routers, muxes, telco
-  gear. Alot of money goes into lighting up the fiber. 
-
-  CapEx shortage. Equipment cost.
-
-  OpEx shortage. What it actually takes to run and operate the
-  network. The CapEx and OpEx are generally about equal in
-  cost. Companies spend about as much money in labor for their
-  operations and engineering staff as they do for their equipment
-  costs. Packet rocket will try to shrink the OpEx part, which is a huge
-  win. Making our boxes easier to use and manage. 
-
-  Carrier OpEx costs are dominated by labor costs.  The more we can do
-  to help the Carrier automate system management, the better.
-
-Drivers
-
-  Decrease CapEx and OpEx
-
-  Continue to grow
-
-  Fold in legacy services to maintain higher margin. Anything we can
-  do to bring the IP and ATM networks together is a good thing. But it
-  will not happen over ATM. Running two networks is more than twice as
-  hard as running one. 
-
-Packets an Chips
-
-For its internal cell switching, a Packet rocket router does not use ATM
-53-byte cells. Packet rocket's cell size is 30 Bytes of payload plus
-overhead. This size efficiently uses Dynamic Random-Access Memory
-(DRAM) bandwidth and avoids IP fragmentation overhead. Unlike a
-Packet rocket router, when cells are much larger than the packets getting
-presented, DRAM bandwidth is wasted.
-
-A fully loaded Atlas router contains 2 RP cards, 3 Switch Cards, 12
-Line Cards, and 48 MAs. Each RP card contains a PowerPC CPU and a CPI
-chip. Each Switch Card has 1 Striper and 12 Memory Controller Unit
-(MCU) chips. Each Line Card supports 1 LCU, 1 NPU, and a maximum of 4
-Media Adapter (MA) cards. Each MA card contains 1 Glue Adaptor (GA)
-chip. The communication to various chips is done through High Speed
-Serial Links (HSSL). From a software perspective, each chip is
-identified by a combination of board ID and chip ID. 
-
-In a full system, each Striper communicates with 8 of 12 NPUs. Each
-Striper communicates with a different set of 8, and at most 4
-overlapping NPUs with any other Striper. Therefore, at least 2
-Stripers are needed to cover all 12 NPUs. Instead of one Striper to
-communicate with 8 NPUs and the other to communicate with the
-remaining 4 NPUs, the Stripers does load balancing, where each Striper
-communicates with 6 NPUs each. There can be a third Striper in the
-system as a standby Striper, and it would be switched into service if
-either of the other two Stripers failed. Each Striper listens to at
-most 6 specific NPUs for any given configuration. This redundancy
-scheme is described as 2+1 Switch Card redundancy.
-
-
-10.2 Decreasing CapEx and OpEx While Growing
-
-Buy more efficient gear
-
-  Metrics
-  CapEx
-  Power
-
-  Cooling is a major expense in running a POP. It is almost 1/2 the
-  cost of running the POP HVAC. Figuring out a way to take the heat
-  generated by the equipment out of the building, which takes even
-  more power. 
-
-  Rack space. A central office has a finite size. 
-
-Make it easier to manage
-
-  Fewer boxes to manage. Think about it. In my personal life, do I want to manage one
-  account to pay off each one of my bills? Or do I have one checking
-  account? One thing to manage, even if it has more things in it, is
-  easier than more things to manage. Packet rocket will help customers
-  decrease the number of systems they need to manage. 
-
-  Increase flexibility
-
-  Decrease release management overhead. Customers spends 30-40% of
-  their network engineering time just trying to figure out
-  which sw release to run. "Oh, this image does not work in this part
-  of the network because of this bug. But it'll work over here because
-  we don't use that." Packet rocket will give customers sw images that they
-  don't have to think about. 
-
-  Improve reliability for sw and hw
-
-10.3 Growth
-
-Moore's Law definition:
-
-The observation that the logic density of silicon integrated circuits
-has closely followed the curve (bits per square inch) = 2^(t - 1962)
-where t is time in years; that is, the amount of information storable
-on a given amount of silicon has roughly doubled every year since the
-technology was invented. This relation, first uttered in 1964 by
-semiconductor engineer Gordon Moore (who co-founded Intel four years
-later) held until the late 1970s, at which point the doubling period
-slowed to 18 months. The doubling period remained at that value
-through time of writing (late 1999). Moore's Law is apparently
-self-fulfilling. The implication is that somebody, somewhere is going
-to be able to build a better chip than you if you rest on your
-laurels, so you'd better start pushing hard on the problem. 
-
-tli:
-
-The growth rate is working against us. 100% growth is higher than
-moore's law. We can't keep up with the growth rate simply by turning
-up the hardware. Serial link technology doubles about once every 2
-years. Silicon is once per 2 months. 
-
-   100%/yr >> Moore's law >> Backplane technology
-
-Backplane technology is growing a much slower rate than Moore's
-law. Moore's law is growing much slower than 100% per year. In
-summary, routing technology can't keep up. 
-
-   100%/yr >> D Bandwidth/Power 
-
-If you look at the amount of Bandwidth that we get per watt, that is
-not improving faster than 100%. Boxes keep getting hotter.
-
-   100%/yr >> D Bandwidth/Volume
-
-   Technology improvements work against CapEx. They raise system
-   prices. Decreasing OpEx implies increased system complexity, which
-   hurts system reliability. There are many trade offs.
-
-We are reaching a point were we can't cram more and more stuff into
-tighter boxes. It won't scale. Physics will not allow it. To decrease
-OpEx, we will make the system more intelligent so it takes less effort
-to manage it. 
-
-10.4 Resolutions
-
-Continued system growth
-
-Limitations on physical features drive hardware clusters
-
-Software clusters decrease OpEx by reducing boxes. Interconnect a
-handful of Atlases, interconnect them with existing MAs, and write
-some software so the entire thing behaves as one router. To the
-operations folks who are 3,000 miles away from the system, it should
-feel like a single router. This clustering will decrease OpEx.
-
-Bleeding edge technology, just one or two generations behind
-microprocessors because we want something that is reliable and
-stable. Be a little behind the curve. 
-
-Merged services over IP and MPLS. IP alone will not do it. ISPs will
-run voice and VPNs over the network. 
-
-Clusters decrease need for POP interconnect and optical
-switching. That is, many many Atlas racks of equipment functioning as
-one router. Non revenue interfaces interconnect the different boxes. The
-hardware cluster fabric itself becomes the primary entire bandwidth
-for the POP. After we eliminate the optical switch, we can allow any
-DWDM port to connect with any router port. We'll have true any-to-any
-bandwidth after we cluster the routers together. All the router ports
-will be equivalent. There is no point to connecting an optical switch
-to a cluster. No need to shift fiber from router to router, because
-it's all "one router."
-
-Packet rocket is designing to 1 petabit of bandwidth and
-this will require 2084 Pro/8812's (or equivalents).
-
-
-10.5 Our Direction
-
-Seymour cluster based on Atlas/Gordon/Electra
-Preserve CapEx in Chassis, LC, MA, & RP
-Software clustering (all routers managed as one system)
-Hardware clustering w/ fiber interconnect
-Upgrade via switch card swap
-Increasing interface speeds and diversity. OC-768
-Increasing density while clustering. New processing technology.
-Improved backhaul and edge density
- 
-The interconnect cost between the edge box and the core box is killing
-customers. Customers need to integrate their edge boxes into the
-core. If we take this to its logical conclusion, we end up with only 1
-box in the POP. The "box" is redundant, reliable, core interfaces,
-edge interfaces, and its extensible (it grows as the provider
-grows). Imagine one box providing all the bandwidth needs for the
-entire Bay Area. It's all about delivering bits. Delivering more
-bandwidth more efficiently. 
-
-
-10.6 Industry Issues:  Defining the problem 
-
-Has the new router hardware introduction rate kept up with traffic
-increase rate?
-Are routers scaling fast enough?  
-Are routers getting simpler at the core? From a functionality
-standpoint, are they doing less? Do you want this to change?
-Despite management complexity, are VPNs generating revenue?
-Does Traffic Engineering address your needs? Is it easy to manage?
-
-Answer: No. Most ISPs are hurting on OC-192 port count. Today they can't look
-at packets at line rate. They need to count packets, and it's been a
-longgggg wait. Need a way to count packets on a per prefix and per AS
-basis. Want this ability in hardware. Been requesting this for a long
-time. Need cluster solutions that are easy to manage. 4 to 10 routers
-per POP. Vendors need to stop hyping 99999.
-
-Is BGP scaling? What areas cause a big problem?
-Answer: BGP has been forced to do so much. Nothing should
-change. However, the iBGP mesh explodes as the number of routers
-increase in the POP. Customers need a much simpler way of
-consolidating. 
-
-
-Should we have simpler routers in the core?
-Answer: Not at all
-
-Are VPNs generating any revenue?
-Answer: No. But a CPE based IPsec VPN is the future. And that, will
-generate revenue.
-
-Is TE needed in the core?
-Answer: No. However, none of the customers came from a Telco background.
-
-How is IGP stability? What new features do you want in IGPs?
-Answer: No new features are needed. 
-
-Do you think IPv6 is solving any of these problems? If not, is this
-where we should go to solve the problem?
-
-Is edge bandwidth growing at a faster rate than at the core?
-Answer: The core is growing 3-4Xs faster than the edge. 
-
-Are today's routers easier to manage?
-Answer: No. The biggest problem that ISPs have with vendors is getting
-stable features sooner.
-
-Is software still the primary reason for router failure?
-Answer: No. 40% of the new boards are Dead On Arrival (DOA). 
-
-Do you believe in redundant RP solutions? How much effort should be
-spent?
-
-Do you need QoS, and if so, what kind is it?
-Answer: There was total silence in the room. 
-
-What trend shifts do you see in the ISP business?
-Answer: Most of the consolidation is done in the service provider
-business. However, there will be more bad news before it's done. 
-
-Is North America influenced by international network designs?
-Answer: Most international designs are copy cats of North America
-design. 
-
-Has public vs private peering changed over the last 3 years?
-
-Are L2 switches still integral to your backbone design? What about
-ATM and optical switches?
-Answer: yes. 
-
-Does router clustering address your concerns with managing too much
-equipment? Or, is L1 and L2 integration sufficient?
-
-
-## Wireless
-
-The future of networking will be driven by the need for more
-bandwidth at ever decreasing costs. The resulting technology will
-still be called Ethernet.
-
-Innovators will find a practical wireless last-mile solution. This will
-spell the death knell for the RBOC's.
-
-We don't have broadband wireless covering 80% of the population
-yet. If and when wireless becomes the de facto distribution for last
-mile broadband, then VoIP over wireless will be part of the standard
-flat rate Internet access fee. The incremental cost of the VoIP call
-will be zero.
-
-"Free service" and it is true. There are no incremental costs above
-and beyond an existing broadband connection and flat rate Internet
-access fee.
-
-
-## Netheads vs Bellheads
-
-There's a limit to what packet
-switching can and should be used for. Use the right tool for the job
-at hand, taking cost, reliability, speed, etc. into account. Do I
-really want my bank running transactions over the Internet? Not
-without some crypto than is far stronger than what I know of. Do I
-want my 911 call routed over the Internet? No thank you, the
-technology is too immature and frankly, that's one thing that I'm just
-not willing to gamble with yet. Give it another 100 years or so.
-
-Just because you CAN do something doesn't make it the best way to do
-something. As someone very wise once taught me: "Don't fall in love
-with the technology. There's always something better around the bend."
-Turning things into a religious debate is NOT the sign of a good
-engineer. A good engineer should be trying to look at things as
-objectively as possible, understand that all technologies have
-limitations, and optimize to meet requirements. That's it.
-
-## Packet Network vs Circuit Network
-
-You ask why we should consider merging technologies. The
-economic answers are clear: running two networks is more
-expensive than one. The carriers must cut costs somehow. Even if
-the result is that most new deployments go to the packet network
-while legacy and life-critical deployments stay on the circuit
-network, the carriers will be able to avoid extremely costly capacity
-upgrades to the circuit side.
-
-Thus, the future will be a mixture: the circuit side will continue to
-support some services and it will not get decomissioned in anything
-like our lifetime. Most new services will be deployed on the packet
-network. And all of this feuding is pretty much for naught, because
-the economics of the situation are pretty compelling.
-
-## VoIP vs POTs vs Cell Phone
-
-The case for VoIP is quite clear and it arrives in the mail monthly. If I
-can make phone calls and not pay POTS rates for them, then that
-should make my bill cheaper. As a consumer, I can make the choice
-of the technology that I want to use to make my call. Yes, VoIP is
-not identical to analog, but for the vast majority of situations, it's
-perfectly adequate. This is acceptable to the vast majority of
-consumers. Consider cell phones. The quality of the call and the
-reliability are nowhere near matching the average land line.
-However, consumers are willing to pay more for the feature of
-mobility. The consumer can and quite reasonably will enjoy some
-economic benefit from VoIP. And that's what makes this technology
-compelling. Even at $.05 a minute, long distance costs too much.
-
-I'll also point out that I've visited several large organizations where
-they've deployed VoIP for their own internal usage. They find that it
-simplifies the wiring problem and has proven reasonably reliable.
-While it has less of an impact on their long distance bills (because
-the folks that they are calling are still on POTS), even the cost
-improvements due to savings on internal phone calls and location
-flexibility have paid off handsomely. Once the technology matures a
-bit, watch out.
-
-Again, let me point you to the folks who already have Internet access
-and can download a softphone for VoIP. Fact: you can get into VoIP these days for not
-much more than the cost of a headset. Yes, startup costs will deter
-some. But for the early adopters, this is not that much of an issue.
-Folks are already installing broadband just for Internet access. VoIP
-is just a bit more possible value added to the mix. I should also
-point out that a) micro optimization is EXACTLY what this is all about
--- you're going to think about how you make your phone call exactly
-because someone is pinching pennies
-
-
-Then someone else on lightreading said:
-Since this is a predictive statement, I can not argue against this. But
-I would like to know why. Is it because, those services can not be
-supported in the TDM environment? If so, can you give an example
-of such services?
-
-Simply because it is cheaper. Look at the cost per bit of TDM gear
-vs. packet gear.
-
-Tony
-
-Look, whatever you want to call it, I want to be able to make a
-phone call for less. For the same call, the VoIP call is cheaper than
-the PSTN call. Yes, ok, I sacrifice QoS, but then again, I'm happy to
-sacrifice it if my call isn't life-threatening.
-
-Hmmm... And if I'm willing to live without "reliability and QoS" I can
-use my cell (for more money, but with mobility) or I can use VoIP for
-free. Well, I know what I'm going to choose. ;-)
-
-Actually, what will be really interesting is when we have a wireless
-last mile deployed and can have mobile VoIP. That should be truly fun.
-
-Well, all that I'm arguing is that with VoIP, I can also make the
-trade-off. I haven't been watching the cell world closely, but have
-folks actually been able to raise their prices because of quality
-improvements? As far as I can tell prices are stable or falling.
-
-
-## Enterprise Market
-
-mass market = residential access
-
-Sorry, no. The mass market for networking gear is the Enterprise. The
-internal bandwidth of an office building frequently is several orders
-of magnitude more than its external bandwidth. Similarly, the number
-of Ethernet ports sold into Enterprises far exceeds the sum total of
-all ports bought by carriers for core, access and aggregation
-combined. 
-
-As with all things silicon, costs are driven by volume. The Enterprise
-chose Ethernet (no matter what the real technology is, we'll call it
-Ethernet ;-), and that drives the volume and that drives CoGS and in
-turn end user prices. 
-
-As soon as you do something outside the volume envelope, your costs go
-way up. That little phrase "carrier grade" is a 10x price multiplier.
-
-Tony
-
-
-## SW Release Maintenance Issues
-
-tli
-
-There's no such thing as not affecting a release.  Everytime
-a software engineer fixes a bug, there's a 20% chance that
-he's introducing another bug that's just as bad.  [I'd argue
-that the real number is more like 50% -- whatever.]
-
-This is simply a fact of life.  Until such time as computers
-can program themselves, we have to have humans work on them.  And
-humans make mistakes.  Without the ability to somehow magically
-*KNOW* that we are not introducing a regression, we will break things.
-And that pisses off customers far more than anything else.
-
-Well, what we're doing is exactly the opposite: you have to
-justify why a fix should go into a shipping release.  As you
-point out, it's a cosmetic bug and we didn't find that level
-of justification.  If folks want to avoid the hop scotch, then
-they need to stay with a single, stable release.  That means
-that they will have to work around cosmetic issues.  If they're
-not willing to do that, then we have an issue.  We can't
-provide stability and all patches at the same time.  IOS tried
-and you see the result.
-
-
-## Multicast Test Scenarios, Demo Setup, and Troubleshooting Tips
-
-a) Multicast Test Scenarios
-
-dino
-
+```
     First demo: "We-are-not-vaporware" demo
     ---------------------------------------
 
@@ -1590,205 +1683,7 @@ dino
      like 3 OC-768 interfaces. Show we can replicate at 35gbps.
    o Add more superinterfaces at will, while you are getting jazzed about 
      this demo. How far can you push it?
-
-
-b) Demo Setup
-
-
-for those of you with nothing to do (Bill), 
-Please check out the following instructions.
-
-if you have Linux, you can download a VLC binary from 
-   www.videolan.org  and then come in and check it out.
-
---------------------------------------------------------------------------------
-
-Downloading and starting VLC:
-
-You must support IPv6 on your computer.
-See below for starting IPv6 on windows XP and Macintosh
-
-  1) Connect to one of the open cables in the csim lab
-     (or go to www.videolan.org)
-  2) ftp 2001:1:3::f ntt password ntt
-  3) "get vlc-0.6.2-win32.exe"
-  4) quit
-  5) Double click on the installation file
-  6) cd to where vlc was installed
-     -- c:\Program Files\VideoLAN\VLC
-     -- /Applications/VLC.app/Contents/MacOS/
-  7) Type in the following command line
-     -- .\vlc --ipv6 udp://@[ff3e:0:1::253]  (Windows)
-     -- ./VLC --ipv6 udp://@\[ff3e:0:1::253\]  (Mac)
-
-
-
-Starting IPv6 on Windows XP:
-----------------------------
-  1) Open a command window [start:run:cmd]
-  2) Type "ipv6 install"
-  3) check that you have an ipv6 address: Type "ipconfig"
-     if an IPv6 address does not appear go to "Windows XP requirements for IPv6"
-
-
-Windows XP requirements for IPv6:
----------------------------------
-  There are several updates required for proper operation of IPv6 on
-  a Windows XP system.  If "ipconfig" does not print out an IPv6 address
-  you may have IPv6 installed, but it will be an older and obsolete version.
-  Using IE and a connection to the internet, go to the tools menu and
-  select "upgrade windows".  You should install all the "critical" upgrades.
-  You will have to then install an "optional" upgrade for Advanced 
-  Networking.  Unfortunately this upgrade will also install an IPv6
-  firewall which will disable IPv6 multicast.
-
-Disabling the IPv6 Firewall for Windows XP
-------------------------------------------
-  --Open the control pannel
-  --Select "add or remove programs"
-  --Select "add or remove windows components"
-  --Select "networking services"
-  --IMPORTANT: click on the "DETAILS" button
-  --remove the checkmark next to "IPv6" firewall
-  --click OK
-  --click the "Next" button
-  --quit
-
-c) Troubleshooting Tips
-
-Following are notes from JohnZ on how to view the mcast stream from
-nanog 30 in miami. As you can see, there are some requirements and
-clayton is not happy. ;-)
-
-Note: also see http://www.i2-multicast.northwestern.edu/
-
-
-On Feb 9, 2004, at 3:24 PM, Greg McMillan wrote:
-
->
-> For my own education (not to be printed), I'm wondering what the real
-> problem was with the "setup". I'm just trying to follow your
-> troubleshooting methodology.
->
-
-Well, it looks like neither one of us knows what's going on.  :-)
-I can look on the network using tcpdump to see packets arriving
-on my mac.  I can also look on the core router (the PIM RP) to
-see that it has MSDP state but maybe doesn't have (*,G) or (S,g)
-state.
-
-Given that I was able to track down the router that was the culprit
-by looking at all the routers in between to see which one wasn't
-doing the right thing.  I was able to get PIM to start sending joins
-and so now I have packets arriving on my mac, but VLC doesn't know
-what to do with them.
-
-Unfortunately neither does REALplayer.
-
-So, now the problem is back into clayton's court.
-
-Clayton, I can get REAL to understand your sdp file but it seems to
-object to these lines:
-   a=rtpmap:96 mpeg4-generic/22050/1
-   a=rtpmap:97 MP4V-ES
-
-You said you changed it to H.261, but the sdp file hasn't changes.
-
-So I've to leave now.
-I've shown that claytons mcast is getting to Packet rocket and
-that its now a question of getting the right applications on
-both ends to deal with things properly.
-
-I don't know what he's using to source his packets and as yet
-there is barely any consistency between apps so it could be
-anything.
-
-"vic" and "vat" should work if you have a Linux or FreeBSD box
-and want to try.  Unfortunately the FreeBSD system I have was just
-upgraded to 5.2 and neither of those apps work here.  ``<sigh>``
-
-Clayton claimed in email he was using h262 so vic should be
-good enough if you select the right (S,G).  The G is the
-same for both, but the port numbers are 5432 for vat and 5434 for
-vic
-
-m=audio 5432 RTP/AVP 96
-c=IN IP4 233.0.236.100/128/1
-
-m=video 5434 RTP/AVP 97
-c=IN IP4 233.0.236.100/128/1
-
-So I've to leave now.
-I've shown that claytons mcast is getting to Packet rocket and
-that its now a question of getting the right applications on
-both ends to deal with things properly.
-
-I don't know what he's using to source his packets and as yet
-there is barely any consistency between apps so it could be
-anything.
-
-"vic" and "vat" should work if you have a Linux or FreeBSD box
-and want to try.  Unfortunately the FreeBSD system I have was just
-upgraded to 5.2 and neither of those apps work here.  ``<sigh>``
-
-Clayton claimed in email he was using h262 so vic should be
-good enough if you select the right (S,G).  The G is the
-same for both, but the port numbers are 5432 for vat and 5434 for
-vic
-
-m=audio 5432 RTP/AVP 96
-c=IN IP4 233.0.236.100/128/1
-
-m=video 5434 RTP/AVP 97
-c=IN IP4 233.0.236.100/128/1
-
-
-
-## BGP History 
-
-tli
-
-Time for a reality check. As the aforementioned cisco employee
-who was 'pushing' BGP, you should know that there wasn't anyone
-in marketing who cared in the least about BGP. I was working on it
-because I knew of the shortcomings of EGP and wanted to help
-grow the Internet. Plain and simple. All of the features (a.k.a., hacks)
-that went into it were the result of customer requests. Those
-features were subsequently documented as part of the normal
-documentation process.
-
-Changes that actually changed the _protocol_ (as opposed to the
-implementation) were reflected in the spec, to the best of our
-abilities. 
-
-I realize that this doesn't fit in well with everyone's paranoid
-conspiracy theories about Cisco market domination. But it is the
-plain and simple truth.
-
-
-from Hyperunner:
-
-By allowing Cisco's implementation (of whatever protocol) to be
-adopted as the standard, the IETF fell down on its job. The
-competition were just as delinquent in their duty, because they let
-Cisco and the IETF get away with it.
-
-Hyperunner,
-
-Yes, the competition was not keeping up. However, your language
-implies that there was something underhanded or improper about
-what was going on. Frankly, the competition simply under-invested
-in the Arpanet because they did not see the eventual commercial
-implications. And to continue being frank, I didn't and Cisco didn't
-either.
-
-BGP was simply a solution to an interesting and challenging routing
-problem. Yes, it would turn out to be necessary for the Internet, but
-without the emergence of the Web, it was simply glue for holding
-our 'geek network' together.
-
-Tony
-
+```
 
 ## ASIC vs COT
 
@@ -1929,79 +1824,6 @@ any IPv6 implementation.
     I think guys like Srihari@Stealth will want to do cool things. So looking
     for similar startups that want to take a bit of risk to do cool things
     for revenue opportunities would be what I suggest for starters.
-
-
-## Growth of the Internet
-
-tli
-
-http://www.dtc.umn.edu/~odlyzko/doc/itcom.internet.growth.pdf
-
-According to the best available numbers, the Internet is continuing to
-grow exponentially at 100%/year. If the market needs a terabit machine
-today, then it will need 2 terabits next year, four the year after
-that, then 8, then 16, 32, 64, etc.
-
-The control plane workload continues to grow rapidly because
-some folks continue to find more ways to spend control plane
-cycles. If folks would commit to not adding new features, we could
-probably stop. Or at least not grow faster than Moore's law. Since
-that's not going to happen, the control plane will always need more
-cycles.
-
-## Forklift Upgrades
-
-The history of this market is somewhat interesting and relevant. At
-any point in time, the industry is capable of producing a router at
-the (reasonable) limits of technology. That improves over time.
-However, when the next generation of technology is released, the
-customer is typically presented with a forklift upgrade, where older
-systems must either be scrapped or reassigned to other tasks where
-they are not operating at their optimal design points.
-
-Thus, the goal that many of us aspire to is to create a system that
-scales in a 'nice' fashion so that forklift upgrades are avoided. Thus,
-yes, we are discussing architectures that are not necessary
-immediately. Perhaps, depending on how large we scale, not for
-years or even decades. Consider it a long term investment in
-technology.
-
-   HFR = 64 OC-192s in a 7 ft rack
-   T640 = 32 OC-192s/chassis x 2 per rack = 64/rack
-   8812 = 48 OC-192s/chassis x 2 per rack = 96/rack
-
-Juniper routers fit in a 19" rack though, so does Avici and Packet rocket.
-
-Buy a platform that has room for expansion and a lifetime in their
-network that exceeds the depreciation cycle of the gear.
-
-If you're trying to perform an apples to apples comparison that
-matters, then let's think about what can be fit into 3 full racks. I
-suspect that HFR will get two chassis of interfaces and a full rack of
-interconnect, giving it 128 OC-192s.
-
-Juniper would get 5 T640's plus the TX, for 160.
-
-Packet rocket would get 5 8812 plus , for 240.
-
-Bottom line: what starts out as a small density advantage will pay
-handsomely when you look at interesting multipliers. Yes, at the small
-scale, all architectures will have a nasty discontinuity right at the
-point where they hit the next quantum of bandwidth, but in the long
-run, this is less of a factor than overall density.
-  
-Number of Electra interfaces per MA:
-
-     10 GigE per MA
-
-     1 10GigE per MA
-
-     4 OC-48 per MA
-
-     1 OC-192 per MA
-
-The total throughput per Line Card is 40G. 
-
 
 ## Multicast vs MPLS
 
