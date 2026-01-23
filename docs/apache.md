@@ -110,5 +110,51 @@ $ /usr/local/sbin/apachectl configtest
 Syntax OK
 ```
 
+## Log rotation
+
+Logs can grow very large. The larger the file size, the longer the read/write access time. Rotating the logs can improve system performance. For each of the files, move them to the current date. There's also a bug in Apache's graceful restart that leaves the other files dangling. That is, it doesn't release all the processes from the files.
+
+The apache logs are in the `/export/content/apache2/logs`. There are several Log files in there. You need to restart (a real start and stop) apache for it to use the new log files.
+
+```
+sudo -s
+cd /export/content/apache2/logs
+for mm  in `ls -1 *_log`; do mv ${mm} ${mm}.`date +%Y%m%d`; touch ${mm}; chown webservd:webservd ${mm}; done
+```
+
+Verification check. Look at the file size, dates, and file users before and after the move:
+
+```
+ls -al
+fuser *
+```
+Then restart Apache:
+
+```
+/export/ctools/bin/apachectl stop
+/export/ctools/bin/apachectl start
+```
+
+After the restart, notice the changes.
+
+Before:
+
+```
+-rw-r--r--   1 webservd webservd 23045670 Jan 31 14:44 iwww-test-ssl-access_log
+-rw-r--r--   1 webservd webservd 21916229 Jul 19  2011 iwww-test-ssl-access_log.20110719
+-rw-r--r--   1 webservd webservd  119680 Jan 31 14:37 iwww-test-ssl-error_log
+```
+
+After:
+
+```
+-rw-r--r--   1 webservd webservd   16956 Jan 31 15:37 iwww-test-ssl-access_log
+-rw-r--r--   1 webservd webservd 21916229 Jul 19  2011 iwww-test-ssl-access_log.20110719
+-rw-r--r--   1 webservd webservd 23100616 Jan 31 15:35 iwww-test-ssl-access_log.20120131
+```
+
+
+
+
 
 

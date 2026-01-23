@@ -93,3 +93,10 @@ Use `wc -l <filename>` to print the line count.
 grep "0.0." mps-using-docin.txt | wc -l
 72
 ```
+
+## egrep
+
+```
+grep "GET /know/index.html" rocket-access_log | wc -l
+grep 'GET /cr/index.html' rocket-access_log | grep '200' | wc -l
+```

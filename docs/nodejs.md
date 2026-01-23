@@ -85,6 +85,30 @@ success Already up-to-date.
 ✨  Done in 0.37s.
 ```
 
+# matt shoup
+
+Per matt shoup, use Node.js for easy and quick webDev. Ruby on Rails is okay, too, and some people swear by it. But Rails forces a very linear approach. Node.js is more flexible. 
+
+node.js – A platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. See http://nodejs.org/
+
+hapi – A rich framework for building web applications and services. hapi is a simple to use configuration-centric framework with built-in support for input validation, caching, authentication, and other essential facilities. See http://spumko.github.io/
+
+From mattShoup:
+  
+I love nodejs because once you install it to get node modules you can simply install them with "npm install the_module_name_would_go_here".
+ 
+http://nodejs.org/
+ 
+And there are lots of ready-to-go npms.
+ 
+https://npmjs.org/
+ 
+Here is the web framework I swear by.
+ 
+https://github.com/spumko/hapi
+ 
+"npm install hapi"
+
 ## Resources
 
 try this http://www.sitepoint.com/using-node-mysql-javascript-client/
