@@ -156,18 +156,4 @@ $ls
 ADOBEAPP                Dumplog.txt             _RESTORE
 ATI                     LOGO.SYS                autoexec.nav
 AUTOEXEC.BAK            MSDOS.---               command.PIF
-AUTOEXEC.BAT            MSDOS.SYS               command.com
-AUTOEXEC.DOS            My Documents            data
-AdobeWeb.log            My Music                dvd-decryption-code
-BACKUP                  NCDTREE                 io.sys
-BOOTLOG.PRV             NETLOG.TXT              liprefs.js
-BOOTLOG.TXT             OSINFO.ENG              mp3
-CHOICE.COM              Program Files           npdrmv2.dll
-COMPATID.TXT            Recycled                npdrmv2.zip
-CONFIG.BAK              SCANDISK.LOG            npds.zip
-CONFIG.DOS              VIDEOROM.BIN            npdsplay.dll
-CONFIG.SYS              WINDOWS                 npwmsdrm.dll
-DELL                    Z2.BAT                  procket
-DELL.SDR                ZZ.EXE                  trash
-DETLOG.TXT              ZZTOP.BAT
 ```

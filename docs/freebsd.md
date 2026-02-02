@@ -45,31 +45,32 @@ than /tools/bin/gcc.
 Before installing FreeBSD, take an inventory of all the installed devices: disk types, controllers, network cards, monitor (and recommended resolution and color display bits), soundcard, video card,
 modems. 
 
-The easiest way to find this information is to look at the boot messages in /var/log/messages. Enter "vi /var/log/messages". After the file opens, go to the end of it by entering a capital G. It's better to go to the latest events then scroll backward. Go to the moment that I last booted the machine. Scroll back until I see the copyrights for the Univ of Calif. That's the beginning. That's the beginning of the boot sequence.
+The easiest way to find this information is to look at the boot messages in `/var/log/messages`. Enter `vi /var/log/messages`. After the file opens, go to the end of it by entering a capital G. It's better to go to the latest events then scroll backward. Go to the moment that I last booted the machine. Scroll back until I see the copyrights for the Univ of Calif. That's the beginning. That's the beginning of the boot sequence.
 
-'dmesg' shows the bootup messages, which provide some info.
+`dmesg` shows the bootup messages, which provide some info.
 
 On a Linux system, you can retrieve system info in the following locations (there's no simple way to list all of it):
 
-Look in the /proc directory. For PCI devices like VGA and controllers, see "cat /proc/pci"
+Look in the `/proc` directory. For PCI devices like VGA and controllers, see `cat /proc/pci`
 
-For memory,  see "cat /proc/meminfo"
+For memory,  see `cat /proc/meminfo`
 
-For CPU, see "cat /proc/cpuinfo"
+For CPU, see `cat /proc/cpuinfo`
 
 Following were some of the settings for Greg's Dell laptop:
 
-   LCD			15" Hitachi SXGA, recommended resolution is
-			1400 X 1050. 32-bit color. It is possible for
-			me to screw up my video hardware by stretching
-			it beyond it's recommended limits. Be cautious! 
-   
-   Graphic controller	ATI Mobility 16 MB
+```
+LCD     15" Hitachi SXGA, recommended resolution is
+        1400 X 1050. 32-bit color. It is possible for
+        me to screw up my video hardware by stretching
+        it beyond it's recommended limits. Be cautious! 
 
-   Net card		Actiontec 82559-based mini PCI Ethernet
-			Adaptor 10/100
+Graphic controller	ATI Mobility 16 MB
 
-   Sound card		ESS Technology Maestro3 (ESS Maestro PCI Audio wdm)
+Net card		Actiontec 82559-based mini PCI Ethernet Adaptor 10/100
+
+Sound card		ESS Technology Maestro3 (ESS Maestro PCI Audio wdm)
+```
 
 ## Memory, CPU, PCI Bus
 
@@ -258,22 +259,20 @@ http://www.techsupportforum.com/forums/f108/solved-dell-inspiron-error-0271-and-
 
 4. F10
 
-## Halt Reboot
+## sync, halt, reboot
 
 ```
 sync;halt
 sync;reboot
 ```
 
-The ";" is just a command separator. You could also enter "sync", Return, then "halt". After entering "sync;halt", just press the power button to turn off the machine.
+The `;` is just a command separator. You could also enter `sync`, Return, then `halt`. After entering `sync;halt`, just press the power button to turn off the machine.
 
-To reboot, you must be "root". However, first enter "sync;". Reason: When you write to a disk, it does not go all the way to the disk. It goes into buffers and memory. Eventually, it finds its way out to the disk. The "sync" command takes all the stuff that is cached in the buffers and kernel and pushes it out now. Do this to put everything into a consistent state. 
+To reboot, you must be `root`. However, first enter `sync;`. Reason: When you write to a disk, it does not go all the way to the disk. It goes into buffers and memory. Eventually, it finds its way out to the disk. The `sync` command takes all the stuff that is cached in the buffers and kernel and pushes it out now. Do this to put everything into a consistent state. 
 
 One of the ways a highly evolved operating system gets to be fast is by doing updates to relatively slow media asynchronously. When you say write this file, the system tells you its done. But it's not really done. The system sent the operation on its way. 
 
 The LAST THING YOU WANT TO DO, IS POWER THE MACHINE OFF. When taking the machine down, need to push out the pending operations (runs). This is why when the power goes off, some machines take a long time to come back up.
-
-The ";" is just a command separator. I could also just enter "sync", Return, then "halt". I need to be "root" to do this.
 
 After entering "sync;halt", just press the power button to turn off the machine.
 
@@ -686,27 +685,27 @@ To download/install packages:
 
    7. Rehash and verify the new packages are present on the system:
 
-      greg-pc# rehash
-      greg-pc# which netscape
+```
+      $ rehash
+      $ which netscape
       /usr/local/bin/netscape
-
-      Use "rehash". If using cshell, it remembers certain things about
+```
+      Use `rehash`. If using cshell, it remembers certain things about
       how to find files. When something new gets installed, the cshell
       might not know where to find the new package. Rehash wakes up
       the cshell and updates it's cache to find things. Rehash is the
       trick to tell the cshell to go out and learn how to find things
       again.
 
-Note: After downloads to the system, enter "rehash" to update the
+Note: After downloads to the system, enter `rehash` to update the
 path variable. Otherwise, my system will not discover the new package
 unless I reboot my system. 
 
 To verify that a package is present, enter:
 
 ```
-wazoo> ls -l `which freeamp`
+$ ls -l `which freeamp`
 -r-xr-xr-x  1 root  wheel  686488 Apr 18  2001 /usr/local/bin/freeamp*
-wazoo> 
 ```
 
 ## Old.... Installing and Removing Software Ports
@@ -2190,60 +2189,34 @@ procfs              4        4        0   100%    /proc
 
 Fstab defines the filesystem or device to be mounted.
 
+1. Inspect the `fstab` file:
+
+```
+$ cat /etc/fstab
+# Device                Mountpoint      FStype  Options         Dump    Pass#
+/dev/ad0s3b             none            swap    sw              0       0
+/dev/ad0s2a             /               ufs     rw              1       1
+#/dev/X         /scratch                ufs     rw              2       2
+/dev/ad0s4e             /usr            ufs     rw              2       2
+/dev/acd0c              /cdrom          cd9660  ro,noauto       0       0
+/dev/ad0s1/dos          /msdos          msdos   rw              0       0
+proc                    /proc           procfs  rw              0       0
+```
+
+2. Make changes to the file using `vi /etc/fstab`.
+
+3. Use `mount -a` to mount everything that is in the fstab that is auto mountable. However, sometimes I'll have fstab entries that don't support auto mount (wait to be told to auto mount). 
+
+```
+$ mount -a
+msdos: /dev/ad0s1/dos: Operation not supported
+```
+
+To fix the error, the device should be `/dev/ad0s1`.  Lose the `/dos` part of what you have there.
+
+For XP, might need to use `mount_ntfs`.
+
 See http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/book.html
-
-For XP, might need to use "mount_ntfs"
-
-The device should be /dev/ad0s1.  Lose the /dos part of what you have
-there.
-
-```
-> greg-pc# mount -a
-> msdos: /dev/ad0s1/dos: Operation not supported
-> greg-pc# 
-> greg-pc# cat /etc/fstab
-> # Device                Mountpoint      FStype  Options         Dump    Pass#
-> /dev/ad0s3b             none            swap    sw              0       0
-> /dev/ad0s2a             /               ufs     rw              1       1
-> #/dev/X         /scratch                ufs     rw              2       2
-> /dev/ad0s4e             /usr            ufs     rw              2       2
-> /dev/acd0c              /cdrom          cd9660  ro,noauto       0       0
-> /dev/ad0s1/dos          /msdos          msdos   rw              0       0
-> proc                    /proc           procfs  rw              0       0
-> greg-pc# 
-> greg-pc# 
-> greg-pc# pwd
-> /
-> 
-> Jerry Kreuscher writes:
->  > Greg McMillan wrote (on Monday Oct  8, at 12:03:01):
->  > 
->  > > Any idea what I'm doing wrong?
->  > > 
->  > 
->  > Try it with msdos for the fstype instead of dos.
->  > 
->  > > greg-pc# mount -a
->  > > mount: exec mount_dos not found in /sbin, /usr/sbin: No such file or directory
->  > > greg-pc# cat /etc/fstab
->  > > # Device                Mountpoint      FStype  Options         Dump    Pass#
->  > > /dev/ad0s3b             none            swap    sw              0       0
->  > > /dev/ad0s2a             /               ufs     rw              1       1
->  > > #/dev/X         /scratch                ufs     rw              2       2
->  > > /dev/ad0s4e             /usr            ufs     rw              2       2
->  > > /dev/acd0c              /cdrom          cd9660  ro,noauto       0       0
->  > > /dev/ad0s1/dos          /msdos          dos     rw              0       0
->  > > proc                    /proc           procfs  rw              0       0
->  > > greg-pc# 
-```
-
-Jerry entered "cat /etc/fstab". We need to edit this file, so we
-    can comment off this "X". Jerry then entered "mount -a". Then,
-    "mount /usr". Then, "vi /etc/fstab". Jerry put a "#" in front of
-    the line "/dev/X". Then, "mount -a". Then, "Ctrl d". The command
-    "mount -a" mounts everything that is in the fstab that is
-    auto mountable. However, sometimes I'll have fstab entries that
-    don't support auto mount (wait to be told to auto mount). 
 
 ## Windows Killed Boot Manager
 

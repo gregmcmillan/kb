@@ -28,8 +28,8 @@ sl0: flags=c010<POINTOPOINT,LINK2,MULTICAST> mtu 552
 
 ## Interface specific
 
-You can also enter ``ifconfig <interface-type>``. On my laptop, the Ethernet interface is
-called "fxp0", so I would enter "ifconfig fxp0" as a short cut.
+You can also enter `ifconfig <interface-type>`. On my laptop, the Ethernet interface is
+named `fxp0`, so I would enter `ifconfig fxp0` as a short cut.
 
 ```
 $ ifconfig fxp0

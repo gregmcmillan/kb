@@ -129,6 +129,32 @@ Default Server:  [1.1.1.1]
 Address:  1.1.1.1
 ```
 
+## tftp
+
+```
+tftp -i <addr> get <file>
+```
+
+Cool DOS command to `tftp get` a file (iploadslb.txt) from a tftp server
+(10.47.12.55) and then use notepad to view its contents.
+
+1. Confirm the server is reachable:
+
+```
+U:\>ping 10.47.12.55
+
+Pinging 10.47.12.55 with 32 bytes of data:
+
+Reply from 10.47.12.55: bytes=32 time<10ms TTL=126
+```
+
+2. Transfer the file:
+
+```
+U:\>tftp -i 10.47.12.55 get iploadslb.txt
+Transfer successful: 2732 bytes in 1 second, 2732 bytes/s
+```
+
 ## And More
 
 ```

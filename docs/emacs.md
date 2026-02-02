@@ -1662,3 +1662,269 @@ also popped up:
 Solution: Windoze Rmail uses utf-8 encoding by default. Changing the other
 encoding schemes didn't fix anything. Had to go back to FrameMaker and
 resave the text file using ASCII encoding. That fixed it!
+
+## PSGML
+
+PSGML is a LISP package for Emacs.
+
+In addition to letting you select and add the appropriate tags with a
+minimum of keystrokes, PSGML can insert required tags automatically, help
+you find structural mistakes, indent tags to show nesting structure,
+and let you set tags, comments, and entity references in different
+fonts or colors to make it easier to see the structure.
+
+The `psgml.info' is the documentation for PSGML in the info format.
+You can read this with the Emacs command `C-u C-h i'.  You can also
+install the file in your systems info directory and edit the `dir' file
+to include `psgml.info' in the menu.
+
+### LISP Background
+
+LISP functions are usually in the form of a list (the name actually
+means  List Processor ) within parentheses. The first item in the list
+is the function name; the number and role of the remaining items
+depend on which function starts the list.
+
+Other programming languages use true and false or 1 and 0 to turn 
+Boolean variables on and off. Emacs uses nil to turn Boolean variables
+off for reasons that have more to do with LISP than with Emacs; the t
+is just a convention, because anything other than nil assigns a true
+value. (This is similar to the C-related languages' use of 0 to
+represent false and any other number to represent true. ) Remember
+this when reading Emacs documentation, which rarely tells you to set a
+variable to t it's more (mathematically) proper because it tells you
+to set a Boolean variable to nil for one kind of behavior or to a
+non-nil value otherwise. Use t for this.
+
+### PSGML Install
+
+a. Untar install the psgml bits as described by /psgml/psgml-1.2.5/INSTALL
+
+b. Make sure that Emacs knows where to find the .el and .elc files.
+   Add following load-path to .emacs:
+```
+   (setq load-path (append '("/usr/psgml/psgml-1.2.5")
+                          load-path))
+```
+c. Put the following line in .emacs:
+
+     (autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
+
+
+d. byte-force-recompile all the .el files in the psgml directory:
+
+             M-x byte-force-recompile
+
+   When prompted, enter /usr/psgml/psgml-1.2.5
+
+
+5. Download nsgmls, which is the sgml validator program used by
+   psgml. Nsgmls is one program in a package called SGML Parser (SP)
+   created by James Clark.
+
+  Nsgmls is not installed if you see this error message in the bottom
+  window during an xml validation attempt (C-c C-v):
+```
+  cd /home/backup/xml/
+  nsgmls -wxml -s  test.xml
+  nsgmls: Command not found.
+```
+  SGML validation exited abnormally with code 1 at Sat Nov 13 10:55:29
+
+  Get SP from freebsd.org in the "textproc" ports category.
+
+  Documentation http://www.jclark.com/sp/nsgmls.htm
+
+### Invoke PSGML
+
+PSGML defines major modes called sgml-mode and xml-mode.  Files
+with extensions `.sgml', `.sgm' or `.dtd` will automatically be edited
+in SGML mode.  To edit some other file in SGML mode, type `M-x
+sgml-mode` after finding the file.  To edit XML files, type `M-x
+xml-mode`.
+
+If you can modify the file you can add a "Local Variables" list
+(*note Local Variables in Files: (emacs)file variables.) to the end of
+the file.
+
+
+To make Emacs automatically set xml mode and user options when the
+file is loaded, put a line at the top of the file to tell emacs to use
+sgml mode:
+```
+     <!-- -*- xml -*- -->
+```
+But remember that you can't have a comment before the _SGML
+declaration_ or the _XML declaration_.
+
+
+### Emacs Keyboard Macro: Insert XML Comment
+
+To store a keyboard macro definition in your .emacs file so that
+you can use that macro without ever needing to redefine it, the
+insert-kbd-macro command adds the Emacs LISP equivalent of the macro
+definition to the current buffer. Let's look at an example. A handy
+macro for SGML people is one that speeds the entry of comments. 
+
+To define a macro, first enter 
+```
+      C-x ( 
+```
+to tell Emacs to start recording a macro, and then enter the
+characters
+```
+      <!-- --> 
+```
+followed by four cursor-left keystrokes, which put the cursor where
+you can start typing the comment. Next, enter 
+```
+      C-x ) 
+```
+to tell Emacs to stop recording. Name your macro by pressing M-x and
+entering namelast- kbd-macro at the prompt in the minibuffer. A good
+name would be xcomment. Next, edit your .emacs file, or its
+equivalent in the operating system you're using, and move your cursor
+to a blank line where you want the macro definition. Press M-x to
+bring up the minibuffer prompt and enter the insert-kbd-macro
+command. When Emacs asks which macro to insert, type
+sgmlcomment. You'll see the following appear at the cursor: 
+```
+      (fset xcomment 
+         [?< ?! ?- ?- ? ? ?- ?- ?> left left left left]) 
+```
+Now you have a new command in your Emacs environment called
+sgml-comment.  Since typing this at the command line is no easier than
+typing out <!-- --> every time you want to enter a comment, you'll
+want to assign this new command to a keystroke, so add the line
+(global-set-key ^Co 'sgml-comment) to assign it to the C-c o
+keystroke. (I chose this because c and o are the first two letters in
+the word comment and because this keystroke combination is not bound
+to any existing Emacs function. Remember to enter C-q before entering
+C-c so that the C-c character is inserted into your .emacs file. Enter
+the o as you would normally.) Make sure to save your .emacs file. Quit
+out of Emacs, start it up again with a test file, and enter C-c o to
+see your new saved macro in action.
+
+### Automatic Visual Formatting
+
+- indenting of the element nesting levels
+- displaying markup in different fonts or colors
+
+First put this in .emacs, which auto-parses an xml file and applies set
+auto formatting to it:
+```
+(setq sgml-auto-activate-dtd t)
+(setq sgml-set-face t)
+```
+One of the commands that "sgml-auto-activate-dtd" causes emacs to
+parse is the "sgml-next-trouble-spot" command, which is invoked by
+pressing C-c C-o or by selecting "Next Trouble Spot" from the "Move"
+menu. 
+
+The most common problem that sgml-next-troublespot finds is a tag that
+doesn't belong somewhere, either because it's in the wrong place or
+because it's not even a valid tag for that document (for example, if
+the generic identifier has a typo). If it finds no problems, the
+cursor jumps to the end of the document, finishes up any visual
+formatting, and displays the message Ok in the minibuffer.
+
+
+### Docs
+
+PSGML Tricks
+http://www.snee.com/bob/sgmlfree/emcspsgm.html
+
+DocBook
+http://docbook.org/
+
+
+### .emacs Config
+
+```
+;psgml
+
+;;load psgml
+;(setq load-path (append '("/usr/psgml/psgml-1.2.5")
+;                       load-path))
+
+
+;(autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
+
+;Auto start visual formatting of xml files
+(setq sgml-auto-activate-dtd t)
+(setq sgml-set-face t)
+
+(setq sgml-balanced-tag-edit t)
+(setq sgml-auto-insert-required-elements t)
+
+;auto indent the tags as I type. Displays the doc structure.
+(setq sgml-indent-step t)
+
+;reallign edited text
+(setq sgml-split-element t)
+
+;; Turn on syntax coloring
+      (cond ((fboundp 'global-font-lock-mode)
+      ;; Turn on font-lock in all modes that support it
+      (global-font-lock-mode t)
+      ;; maximum colors
+      (setq font-lock-maximum-decoration t)))
+
+      ;; in sgml documents, parse dtd immediately to allow immediate
+      ;; syntax coloring
+      (setq sgml-auto-activate-dtd t)
+
+      ;; set the default SGML declaration. docbook.dcl should work for most DTDs
+      ;(setq sgml-declaration "c:/cygwin/usr/local/lib/sgml/dtd/docbook41/docbook.dcl")
+      
+      ;; here we set the syntax color information for psgml
+      (setq-default sgml-set-face t)
+      ;;
+      ;; Faces.
+      ;; To changes colors, select Edit/Text Properties/Display Colors
+      ;;
+      (make-face 'sgml-comment-face)
+      (make-face 'sgml-doctype-face)
+      (make-face 'sgml-end-tag-face)
+      (make-face 'sgml-entity-face)
+      (make-face 'sgml-ignored-face)
+      (make-face 'sgml-ms-end-face)
+      (make-face 'sgml-ms-start-face)
+      (make-face 'sgml-pi-face)
+      (make-face 'sgml-sgml-face)
+      (make-face 'sgml-short-ref-face)
+      (make-face 'sgml-start-tag-face)
+
+      (set-face-foreground 'sgml-comment-face "dark turquoise")
+      (set-face-foreground 'sgml-doctype-face "red")
+      (set-face-foreground 'sgml-end-tag-face "yellow")
+      (set-face-foreground 'sgml-entity-face "magenta")
+      (set-face-foreground 'sgml-ignored-face "gray40")
+      (set-face-background 'sgml-ignored-face "gray60")
+      (set-face-foreground 'sgml-ms-end-face "green")
+      (set-face-foreground 'sgml-ms-start-face "yellow")
+      (set-face-foreground 'sgml-pi-face "lime green")
+      (set-face-foreground 'sgml-sgml-face "brown")
+      (set-face-foreground 'sgml-short-ref-face "deep sky blue")
+      (set-face-foreground 'sgml-start-tag-face "peach puff")
+
+      (setq-default sgml-markup-faces
+      '((comment . sgml-comment-face)
+      (doctype . sgml-doctype-face)
+      (end-tag . sgml-end-tag-face)
+      (entity . sgml-entity-face)
+      (ignored . sgml-ignored-face)
+      (ms-end . sgml-ms-end-face)
+      (ms-start . sgml-ms-start-face)
+      (pi . sgml-pi-face)
+      (sgml . sgml-sgml-face)
+      (short-ref . sgml-short-ref-face)
+      (start-tag . sgml-start-tag-face)))
+
+      ;; load xml-mode 
+      (setq auto-mode-alist
+      (append (list (cons "\\.xml\\'" 'xml-mode))
+      auto-mode-alist))
+      (autoload 'xml-mode "psgml" nil t)
+;      (setq sgml-xml-declaration "c:/cygwin/usr/local/lib/sgml/dtd/html/xml.dcl")
+```
