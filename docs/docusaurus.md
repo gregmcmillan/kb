@@ -116,7 +116,7 @@ export default function MyReactPage() {
 }
 ```
 
-A new page is now available at [http://localhost:3000/my-react-page](http://localhost:3000/my-react-page).
+A new page is now available at 'http://localhost:3000/my-react-page'
 
 ### Create your first markdown page
 
@@ -128,7 +128,7 @@ Create a file at `src/pages/my-markdown-page.md`:
 This is a Markdown page
 ```
 
-A new page is now available at [http://localhost:3000/my-markdown-page](http://localhost:3000/my-markdown-page).
+A new page is now available at 'http://localhost:3000/my-markdown-page'
 
 
 ## Create a document
@@ -276,8 +276,6 @@ Let's see how to [Create a page](/create-a-page).
 ```md
 Let's see how to [Create a page](./create-a-page.md).
 ```
-
-**Result:** Let's see how to [Create a page](./create-a-page.md).
 
 ### Images
 
