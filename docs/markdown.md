@@ -69,9 +69,11 @@ Will jump to a heading like this:
 
 Alternatively, use a named html anchor tag like this:
 
+```
 [mytext-*/](#there_you_go)
 
 <a name="there_you_go"></a>
+```
 
 ### Periods in anchors
 
