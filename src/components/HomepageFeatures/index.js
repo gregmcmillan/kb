@@ -8,7 +8,7 @@ const FeatureList = [
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Step-by-step how to procedures with code examples.
+        Step-by-step developer documentation with code examples.
       </>
     ),
   },
@@ -17,7 +17,7 @@ const FeatureList = [
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Engineers and knowledge strategists have tested the documentation to ensure accuracy and reliability.
+        Engineers and knowledge strategists have tested the content to ensure accuracy and reliability.
       </>
     ),
   },
