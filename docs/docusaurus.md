@@ -39,6 +39,8 @@ $ yarn run start
 
 Good for previewing and debugging the changes on my mac before pushing them to production.
 
+Press `Ctrl+c` (^C) to stop the process.
+
 ## Prod deployment
 
 Use Yarn (not npm) because it scales better and LinkedIn's Docusaurus implementation uses it.
@@ -524,6 +526,28 @@ Or build your site to include all the locales at once:
 
 ```bash
 npm run build
+```
+
+## Meta tags in /head
+
+In Docusaurus, HTML meta tags are not stored in a single static HTML file but are dynamically generated. You can control them using `headTags`.
+
+```
+vi docusaurus.config.js
+```
+
+Then add a `headTags`:
+
+```
+      headTags: [
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'algolia-site-verification',
+        content: '6FEDC3C98D343683',
+      },
+    },
+  ],
 ```
 
 ## References
