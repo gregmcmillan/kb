@@ -90,7 +90,7 @@ const config = {
       appId: 'S180XL6C47',
 
       // Public API key: it is safe to commit it
-      apiKey: '817d7a0f2ba819966e6028aa2a83748e',
+      apiKey: '30138d204ce6587d270daa0a4be8397e',
 
       indexName: 'Rabbit Crawler',
 
