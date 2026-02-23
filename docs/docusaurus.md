@@ -528,15 +528,23 @@ Or build your site to include all the locales at once:
 npm run build
 ```
 
-## Meta tags in /head
+## Algolia DocSearch
 
-In Docusaurus, HTML meta tags are not stored in a single static HTML file but are dynamically generated. You can control them using `headTags`.
+Docusaurus uses Algolia for its free search. 
+
+Follow the article at https://docusaurus.io/docs/search
+
+Here are some gotchas I hit along the way.
+
+### Meta tag authorization in /head
+
+To crawl the code base, Algolia required that I prove that I own the domain (gregmcmillan.github.io) and its github code. I had to prove authorization by adding a meta tag to the Head of at least one HTML page
 
 ```
 vi docusaurus.config.js
 ```
 
-Then add a `headTags`:
+Then add this `headTags` with a specific `name` and `content` code:
 
 ```
       headTags: [
@@ -548,6 +556,215 @@ Then add a `headTags`:
       },
     },
   ],
+```
+
+This code added the tag globally to every exported HTML page on the app.
+
+For example in prod, the tag was added to this file:
+
+```
+https://gregmcmillan.github.io/kb/index.html
+```
+
+See https://docusaurus.io/docs/seo
+
+### Sitemap required
+
+By default, the Docusaurus preset generates a sitemap.xml that the Algolia crawler can use:
+
+```
+https://gregmcmillan.github.io/kb/sitemap.xml
+```
+
+Add this URL to Algolia's crawler configuration:
+
+```
+sitemaps: ["https://gregmcmillan.github.io/kb/sitemap.xml"],
+```
+
+by using the Algolia web editor:
+
+```
+https://dashboard.algolia.com/apps/S180XL6C47/crawler/crawler/f2c2f88a-ed01-465f-ac35-6349dd04523d/editor?tab=url-tester
+```
+### Use the v3 template configuration, AI-201 - Bad input
+
+Was hitting this error:
+
+```
+Chat error
+An error occured while streaming: AI-201. See our documentation link for more information.
+
+AI-201 documentation
+```
+
+Error description, https://docsearch.algolia.com/docs/v4/askai-errors/#ai-201
+
+Solution was to use the officially support Docusaurus v3 crawler configuration.
+
+Copy template, https://docsearch.algolia.com/docs/templates/#docusaurus-v3-template
+
+```
+new Crawler({
+  appId: '<MY-ID>>',
+  apiKey: 'MY-KEY',
+  rateLimit: 8,
+  maxDepth: 10,
+  startUrls: ['https://gregmcmillan.github.io/kb/'],
+  sitemaps: ['https://gregmcmillan.github.io/kb/sitemap.xml'],
+  ignoreCanonicalTo: true,
+  discoveryPatterns: ['https://gregmcmillan.github.io/kb/**'],
+  actions: [
+    {
+      indexName: 'Rabbit Crawler',
+      pathsToMatch: ['https://gregmcmillan.github.io/kb/**'],
+      recordExtractor: ({ $, helpers }) => {
+        // priority order: deepest active sub list header -> navbar active item -> 'Documentation'
+        const lvl0 =
+          $(
+            '.menu__link.menu__link--sublist.menu__link--active, .navbar__item.navbar__link--active'
+          )
+            .last()
+            .text() || 'Documentation';
+
+        return helpers.docsearch({
+          recordProps: {
+            lvl0: {
+              selectors: '',
+              defaultValue: lvl0,
+            },
+            lvl1: ['header h1', 'article h1'],
+            lvl2: 'article h2',
+            lvl3: 'article h3',
+            lvl4: 'article h4',
+            lvl5: 'article h5, article td:first-child',
+            lvl6: 'article h6',
+            content: 'article p, article li, article td:last-child',
+          },
+          indexHeadings: true,
+          aggregateContent: true,
+          recordVersion: 'v3',
+        });
+      },
+    },
+  ],
+  initialIndexSettings: {
+    "Rabbit Crawler": {
+      attributesForFaceting: [
+        'type',
+        'lang',
+        'language',
+        'version',
+        'docusaurus_tag',
+      ],
+      attributesToRetrieve: [
+        'hierarchy',
+        'content',
+        'anchor',
+        'url',
+        'url_without_anchor',
+        'type',
+      ],
+      attributesToHighlight: ['hierarchy', 'content'],
+      attributesToSnippet: ['content:10'],
+      camelCaseAttributes: ['hierarchy', 'content'],
+      searchableAttributes: [
+        'unordered(hierarchy.lvl0)',
+        'unordered(hierarchy.lvl1)',
+        'unordered(hierarchy.lvl2)',
+        'unordered(hierarchy.lvl3)',
+        'unordered(hierarchy.lvl4)',
+        'unordered(hierarchy.lvl5)',
+        'unordered(hierarchy.lvl6)',
+        'content',
+      ],
+      distinct: true,
+      attributeForDistinct: 'url',
+      customRanking: [
+        'desc(weight.pageRank)',
+        'desc(weight.level)',
+        'asc(weight.position)',
+      ],
+      ranking: [
+        'words',
+        'filters',
+        'typo',
+        'attribute',
+        'proximity',
+        'exact',
+        'custom',
+      ],
+      highlightPreTag: '<span class="algolia-docsearch-suggestion--highlight">',
+      highlightPostTag: '</span>',
+      minWordSizefor1Typo: 3,
+      minWordSizefor2Typos: 7,
+      allowTyposOnNumericTokens: false,
+      minProximity: 1,
+      ignorePlurals: true,
+      advancedSyntax: true,
+      attributeCriteriaComputedByMinProximity: true,
+      removeWordsIfNoResults: 'allOptional',
+      separatorsToIndex: '_',
+    },
+  },
+});
+```
+
+Enter it into the Algolia Configuration here, 
+https://dashboard.algolia.com/apps/S180XL6C47/crawler/crawler/f2c2f88a-ed01-465f-ac35-6349dd04523d/editor?tab=url-tester
+
+
+### Search box
+
+Edit `docusaurus.config.js`
+
+Add this under `themeConfig`:
+
+```
+algolia: {
+      // The application ID provided by Algolia
+      appId: 'MY-ID',
+
+      // Public API key: it is safe to commit it
+      apiKey: 'MY-KEY',
+
+      indexName: 'Rabbit Crawler',
+
+      // Optional: see doc section below
+      contextualSearch: true,
+
+      // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
+      externalUrlRegex: 'external\\.com|domain\\.com',
+
+      // Optional: Algolia search parameters
+      searchParameters: {},
+
+      // Optional: path for search page that enabled by default (`false` to disable it)
+      searchPagePath: 'search',
+
+      // Optional: whether the insights feature is enabled or not on Docsearch (`false` by default)
+      insights: false,
+
+      // Optional: whether you want to use the new Ask AI feature (undefined by default)
+      askAi: 'YOUR_ALGOLIA_ASK_AI_ASSISTANT_ID',
+
+      //... other Algolia params
+    },
+```
+
+### Broken link path in search results
+
+Problem. Pages were resolving to `kb` instead of `kb/docs`. 
+
+Solution was to edit `docusaurus.confg.js` and comment out this code block:
+
+```
+/*Optional: Replace parts of the item URLs from Algolia. Useful when using the same search index for multiple deployments using a different baseUrl. You can use regexp or string in the `from` param. For example: localhost:3000 vs myCompany.com/docs
+  replaceSearchResultPathname: {
+    from: '/docs/', // or as RegExp: /\/docs\//
+    to: '/',
+  },
+  */
 ```
 
 ## References
