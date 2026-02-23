@@ -532,6 +532,14 @@ npm run build
 
 Docusaurus uses Algolia for its free search. 
 
+The crawler is named `Rabbit Crawler`, and it crawls the GitHub source repo every Saturday. 
+
+* Algolia Rabbit Crawler dashboard, https://dashboard.algolia.com/apps/S180XL6C47/crawler/crawler/f2c2f88a-ed01-465f-ac35-6349dd04523d/overview
+
+* Algolia data sources crawler, https://dashboard.algolia.com/apps/S180XL6C47/crawler/crawlers
+
+* API keys, https://dashboard.algolia.com/account/api-keys/all?applicationId=S180XL6C47
+
 Follow the article at https://docusaurus.io/docs/search
 
 Here are some gotchas I hit along the way.
