@@ -5,7 +5,7 @@ import styles from './styles.module.css';
 const FeatureList = [
   {
     title: 'Easy to use',
-    Svg: require('@site/static/img/transparent_1px.svg').default,
+    Svg: require('@site/static/img/rabbit.svg').default,
     description: (
       <>
         Step-by-step developer documentation with code examples.
@@ -23,7 +23,7 @@ const FeatureList = [
   },
   {
     title: 'Updated regularly',
-    Svg: require('@site/static/img/transparent_1px.svg').default,
+    Svg: require('@site/static/img/rabbit.svg').default,
     description: (
       <>
         As best practices and industry tools evolve, the docs are updated to reflect the latest trends and technologies in the field.
