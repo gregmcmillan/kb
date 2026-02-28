@@ -1,4 +1,4 @@
-# chmod
+# Chmod
 
 The ``chmod`` utility changes file modes or Access Control Lists of the listed files.
 

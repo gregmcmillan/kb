@@ -1,4 +1,4 @@
-# ifconfig
+# Ifconfig
 
 Use the ``ifconfig`` utility to see if I'm on the network. 
 

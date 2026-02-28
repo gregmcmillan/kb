@@ -1,4 +1,4 @@
-# ps
+# Ps
 
  The `ps` utility displays a header line, followed by lines containing information about all of your processes that have controlling terminals.
 

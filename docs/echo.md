@@ -1,4 +1,4 @@
-# echo
+# Echo
 
 Use the ``echo`` utility to identify the search path for the executable files that
 I'm using. 

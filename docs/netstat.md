@@ -1,4 +1,4 @@
-# netstat
+# Netstat
 
 The ``netstat`` utility symbolically displays the contents of various network-related data structures.
 

@@ -1,4 +1,4 @@
-# pkg
+# Pkg
 
 The `pkg` utility provides an interface for manipulating packages: registering, adding, removing and upgrading packages.
 

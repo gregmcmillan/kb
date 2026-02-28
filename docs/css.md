@@ -1,4 +1,4 @@
-# css
+# CSS
 
 CSS3 includes all of CSS2. There are some changes but nothing drastic.
 

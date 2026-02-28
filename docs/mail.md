@@ -1,4 +1,4 @@
-# mail
+# Mail
 
 Use `mail` to send and receive mail.
 

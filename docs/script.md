@@ -1,4 +1,4 @@
-# script
+# Script
 
 The `script` utility makes a typescript of everything printed on your terminal.
 

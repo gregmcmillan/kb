@@ -1,8 +1,10 @@
 # Docusaurus
 
-A React in-repo site generator used for docs and dynamic knowledge bases.
+It is a React in-repo site generator used for docs and dynamic knowledge bases.
 
-https://docusaurus.io/
+Example app: https://gregmcmillan.github.io/kb/
+
+See also https://docusaurus.io/
 
 ## Installation
 
@@ -530,9 +532,13 @@ npm run build
 
 ## Algolia DocSearch
 
-Docusaurus uses Algolia for its free search. 
+Docusaurus uses [Algolia](https://www.algolia.com/) for its free search plugin.
 
-The crawler is named `Rabbit Crawler`, and it crawls the GitHub source repo every Saturday. 
+To set it up, follow the article at https://docusaurus.io/docs/search. Here are some gotchas I hit while trying to get things to work.
+
+My implementation:
+
+* The KB's crawler is named `Rabbit Crawler`. It crawls the GitHub source repo every Saturday. 
 
 * Algolia Rabbit Crawler dashboard, https://dashboard.algolia.com/apps/S180XL6C47/crawler/crawler/f2c2f88a-ed01-465f-ac35-6349dd04523d/overview
 
@@ -540,77 +546,11 @@ The crawler is named `Rabbit Crawler`, and it crawls the GitHub source repo ever
 
 * API keys, https://dashboard.algolia.com/account/api-keys/all?applicationId=S180XL6C47
 
-Follow the article at https://docusaurus.io/docs/search
+### Use the v3 template configuration
 
-Here are some gotchas I hit along the way.
+Nothing works without this template.
 
-### Meta tag authorization in /head
-
-To crawl the code base, Algolia required that I prove that I own the domain (gregmcmillan.github.io) and its github code. I had to prove authorization by adding a meta tag to the Head of at least one HTML page
-
-```
-vi docusaurus.config.js
-```
-
-Then add this `headTags` with a specific `name` and `content` code:
-
-```
-      headTags: [
-    {
-      tagName: 'meta',
-      attributes: {
-        name: 'algolia-site-verification',
-        content: '6FEDC3C98D343683',
-      },
-    },
-  ],
-```
-
-This code added the tag globally to every exported HTML page on the app.
-
-For example in prod, the tag was added to this file:
-
-```
-https://gregmcmillan.github.io/kb/index.html
-```
-
-See https://docusaurus.io/docs/seo
-
-### Sitemap required
-
-By default, the Docusaurus preset generates a sitemap.xml that the Algolia crawler can use:
-
-```
-https://gregmcmillan.github.io/kb/sitemap.xml
-```
-
-Add this URL to Algolia's crawler configuration:
-
-```
-sitemaps: ["https://gregmcmillan.github.io/kb/sitemap.xml"],
-```
-
-by using the Algolia web editor:
-
-```
-https://dashboard.algolia.com/apps/S180XL6C47/crawler/crawler/f2c2f88a-ed01-465f-ac35-6349dd04523d/editor?tab=url-tester
-```
-### Use the v3 template configuration, AI-201 - Bad input
-
-Was hitting this error:
-
-```
-Chat error
-An error occured while streaming: AI-201. See our documentation link for more information.
-
-AI-201 documentation
-```
-
-Error description, https://docsearch.algolia.com/docs/v4/askai-errors/#ai-201
-
-Solution was to use the officially support Docusaurus v3 crawler configuration.
-
-Copy template, https://docsearch.algolia.com/docs/templates/#docusaurus-v3-template
+1. Copy template at https://docsearch.algolia.com/docs/templates/#docusaurus-v3-template
 
 ```
 new Crawler({
@@ -718,7 +658,7 @@ new Crawler({
 });
 ```
 
-Enter it into the Algolia Configuration here, 
+2. Enter it into the Algolia configuration edit and save it, 
 https://dashboard.algolia.com/apps/S180XL6C47/crawler/crawler/f2c2f88a-ed01-465f-ac35-6349dd04523d/editor?tab=url-tester
 
 
@@ -759,6 +699,57 @@ algolia: {
       //... other Algolia params
     },
 ```
+### Meta tag authorization in /head
+
+To crawl the code base, Algolia required that I prove that I own the domain (gregmcmillan.github.io) and its github code. I had to prove authorization by adding a meta tag to the Head of at least one HTML page
+
+```
+vi docusaurus.config.js
+```
+
+Then add this `headTags` with a specific `name` and `content` code:
+
+```
+      headTags: [
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'algolia-site-verification',
+        content: '6FEDC3C98D343683',
+      },
+    },
+  ],
+```
+
+This code added the tag globally to every exported HTML page on the app.
+
+For example in prod, the tag was added to this file:
+
+```
+https://gregmcmillan.github.io/kb/index.html
+```
+
+See https://docusaurus.io/docs/seo
+
+### Sitemap required
+
+By default, the Docusaurus preset generates a sitemap.xml that the Algolia crawler can use:
+
+```
+https://gregmcmillan.github.io/kb/sitemap.xml
+```
+
+Add this URL to Algolia's crawler configuration:
+
+```
+sitemaps: ["https://gregmcmillan.github.io/kb/sitemap.xml"],
+```
+
+by using the Algolia web editor:
+
+```
+https://dashboard.algolia.com/apps/S180XL6C47/crawler/crawler/f2c2f88a-ed01-465f-ac35-6349dd04523d/editor?tab=url-tester
+```
 
 ### Broken link path in search results
 
@@ -774,6 +765,27 @@ Solution was to edit `docusaurus.confg.js` and comment out this code block:
   },
   */
 ```
+
+## Ask AI
+
+An advanced feature to implement when I have more time ...
+
+Claude Sonnet account, https://platform.claude.com/dashboard
+
+Docs, https://docusaurus.io/docs/search#ask-ai, https://docsearch.algolia.com/docs/v4/askai
+
+Algolia Ask AI dashboard, https://dashboard.algolia.com/apps/S180XL6C47/ask-ai
+
+Claude assistant, https://dashboard.algolia.com/apps/S180XL6C47/ask-ai/stats/14473349-bdfc-4cbb-ab89-13c73cb573cb?
+
+### Yank the Ask AI option from the search box
+
+Delete this from `docusaurus.config.js`:
+
+```
+askAi: 'uUbv00OCBZqI',
+```
+
 
 ## References
 

@@ -1,4 +1,4 @@
-# man
+# Man
 
 A man page (short for manual page) is a form of software documentation usually found on a Unix or Unix-like operating system. man pages usually cover library and system calls, formal standards and conventions, and even abstract concepts. To invoke a man page, type `man <command_name>` in your terminal. Man pages are written in Groff.  
 

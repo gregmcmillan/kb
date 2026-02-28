@@ -1,4 +1,4 @@
-# sed
+# Sed
 
 Use `sed` to edit text in files.
 

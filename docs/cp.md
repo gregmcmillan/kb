@@ -1,4 +1,4 @@
-# cp
+# Cp
 
 The ``cp`` utility copies the contents of the source_file to the target_file.
 

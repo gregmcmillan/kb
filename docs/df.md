@@ -1,4 +1,4 @@
-# df
+# Df
 
 The ``df`` utility displays the disk partitioning structure. 
 

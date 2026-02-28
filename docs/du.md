@@ -1,4 +1,4 @@
-# du
+# Du
 
 The ``du`` (disk usage) utility displays disk usage statistics.
 

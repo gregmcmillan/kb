@@ -1,4 +1,4 @@
-# rehash
+# Rehash
 
 Rehash and verify that the new packages are present on my system:
 

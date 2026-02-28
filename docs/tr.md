@@ -1,4 +1,4 @@
-# tr
+# Tr
 
 Use `tr` to delete characters in a file.
 

@@ -1,4 +1,4 @@
-# awk
+# Awk
 
 Use the `awk` utility to remove the text from a line after a certain character.
 

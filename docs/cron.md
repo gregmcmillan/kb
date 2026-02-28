@@ -1,4 +1,4 @@
-# cron
+# Cron
 
 Edit `crontab` and add reference to run `cron` at 5AM daily:
 

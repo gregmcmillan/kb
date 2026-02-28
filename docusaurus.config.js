@@ -86,7 +86,7 @@ const config = {
         respectPrefersColorScheme: true,
       },
          algolia: {
-      // The application ID provided by Algolia
+      // KB search. The application ID provided by Algolia
       appId: 'S180XL6C47',
 
       // Public API key: it is safe to commit it
@@ -116,8 +116,7 @@ const config = {
       // Optional: whether the insights feature is enabled or not on Docsearch (`false` by default)
       insights: false,
 
-      // Optional: whether you want to use the new Ask AI feature (undefined by default)
-      askAi: 'YOUR_ALGOLIA_ASK_AI_ASSISTANT_ID',
+
 
       //... other Algolia params
     },
@@ -125,7 +124,7 @@ const config = {
         title: 'Home',
         logo: {
           alt: 'My Site Logo',
-          src: 'img/logo.svg',
+          src: 'img/rabbit.svg',
         },
         items: [
           {
@@ -136,7 +135,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/gregmcmillan/kb',
             label: 'GitHub',
             position: 'right',
           },
@@ -152,22 +151,22 @@ const config = {
                 label: 'FreeBSD Tutorial',
                 to: '/docs/freebsd',
               },
+             {
+                label: 'Docusaurus',
+                to: '/docs/docusaurus',
+              },
             ],
           },
           {
             title: 'Community',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'LinkedIn',
+                href: 'https://www.linkedin.com/in/grmcmillan',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
+                label: 'Write the Docs',
+                href: 'https://www.writethedocs.org/',
               },
             ],
           },
@@ -180,7 +179,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/gregmcmillan/kb',
               },
             ],
           },

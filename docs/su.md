@@ -1,4 +1,4 @@
-# su
+# Su
 
 Substitute user identity (``su``) is a utility that requests appropriate user credentials and switches to that user ID.
 

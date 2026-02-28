@@ -1,4 +1,4 @@
-# diff
+# Diff
 
 The ``diff`` utility analyzes two files and prints the lines that are different.
 

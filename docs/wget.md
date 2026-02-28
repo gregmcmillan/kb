@@ -1,4 +1,4 @@
-# wget
+# Wget
 
 Use `wget` to create an offline copy of a site that you can take and view even without internet access. 
 

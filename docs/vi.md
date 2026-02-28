@@ -1,4 +1,4 @@
-# vi
+# Vi
 
 The visual editor (vi) is the standard, default text visual editor available on nearly all Unix and Linux systems. The ``vi`` editor was derrived from ``ex``, and it was developed by [Bill Joy](https://en.wikipedia.org/wiki/Bill_Joy) in the late 1970s for Unix systems. 
 

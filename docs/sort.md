@@ -1,4 +1,4 @@
-# sort
+# Sort
 
 Use `sort` to sort the contents of a file.
 

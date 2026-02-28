@@ -1,4 +1,4 @@
-# tail
+# Tail
 
 The `tail` utility displays the last part of a file.
 

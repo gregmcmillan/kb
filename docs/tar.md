@@ -1,4 +1,4 @@
-# tar
+# Tar
 
 The ``tar`` utility manipulate tape archives. It creates and manipulates streaming archive files.
 

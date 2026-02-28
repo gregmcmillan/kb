@@ -1,4 +1,4 @@
-# mount
+# Mount
 
 Mount a file system.
 

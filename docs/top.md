@@ -1,4 +1,4 @@
-# top
+# Top
 
 The ``top`` utility displays sorted information about processes.
 

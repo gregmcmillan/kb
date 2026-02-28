@@ -1,4 +1,4 @@
-# grep
+# Grep
 
 The ``grep`` utility searches any given input files, selecting lines that match one or more patterns.
 

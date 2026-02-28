@@ -1,4 +1,4 @@
-# dmesg
+# Dmesg
 
 The ``dmesg`` utility displays the system message buffer.
 

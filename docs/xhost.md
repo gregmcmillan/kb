@@ -1,4 +1,4 @@
-# xhost
+# Xhost
 
 Use `xhost +` to tell this display that it's okay for a
 process running on a remote host to write to my local display. 
